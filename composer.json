@@ -1,0 +1,17 @@
+{
+    "autoload": {
+        "psr-0": {
+            "relive" : "app/api"
+        },
+        "files": [ "app/api/dbconfig.php" ]
+    },
+    "require": {
+        "slim/slim": "*",
+        "dogancelik/slim-json": "dev-master",
+        "illuminate/database": "*",
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.8.*",
+        "phpunit/dbunit": ">=1.2"
+    }
+}
