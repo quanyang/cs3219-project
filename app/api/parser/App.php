@@ -42,7 +42,7 @@ class App {
         $this->app->contentType('application/json');
         $this->app->add(new Middleware(array(
             'json.status' => false,
-            'json.override_error' => true,
+            'json.override_error' => false,
             'json.override_notfound' => true
         )));
     }
@@ -57,10 +57,6 @@ class App {
 
             //  GET: /api
             $app->get('/', function() use ($app) {
-                $app->render(200, ['Status' => 'Running']);
-            });
-
-            $app->get('/test/', function() use ($app) {
                 $app->render(200, ['Status' => 'Running']);
             });
 
