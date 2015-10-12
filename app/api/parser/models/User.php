@@ -8,9 +8,7 @@ class User extends \Illuminate\Database\Eloquent\Model {
 	 *
 	 * @var string
 	 */
-	protected $table = 'users';
-	protected  $primaryKey = 'user_id';
-	public $timestamps = false;
+	public $timestamps = true;
 	/**
 	 * The attributes excluded from the model's JSON form.
 	 *

@@ -60,6 +60,28 @@ class App {
                 $app->render(200, ['Status' => 'Running']);
             });
 
+            $app->group('/user', function() use ($app) {
+                $app->post('', 'parser\controllers\UserController::createUser');
+            });
+
+            $app->group('/candidate', function() use ($app) {
+                
+            });
+
+            $app->group('/candidates', function() use ($app) {
+                
+            });
+
+            $app->group('/job', function() use ($app) {
+                $app->group('/:job_id', function() use ($app) {
+                    $app->group('/requirements', function() use ($app) {
+                        $app->get('', 'parser\controllers\JobController::getRequirementsForJob');
+                        $app->post('', 'parser\controllers\JobController::addRequirementsToJob');
+                        $app->delete('', 'parser\controllers\JobController::removeRequirementsFromJob');
+                    });
+                });
+            });
+
         });
     }
 }
