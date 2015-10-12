@@ -1,7 +1,7 @@
 {
     "autoload": {
         "psr-0": {
-            "relive" : "app/api"
+            "parser" : "app/api"
         },
         "files": [ "app/api/dbconfig.php" ]
     },
