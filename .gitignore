@@ -7,4 +7,3 @@ vendor/
 node_modules/
 *.log
 composer.lock
-.htaccess
