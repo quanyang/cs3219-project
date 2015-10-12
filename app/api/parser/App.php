@@ -59,7 +59,11 @@ class App {
             $app->get('/', function() use ($app) {
                 $app->render(200, ['Status' => 'Running']);
             });
-            
+
+            $app->get('/test/', function() use ($app) {
+                $app->render(200, ['Status' => 'Running']);
+            });
+
         });
     }
 }
