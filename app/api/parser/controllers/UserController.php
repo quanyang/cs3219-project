@@ -8,7 +8,7 @@ class UserController extends Controller {
 	}
 
 	private function isValidStringInput($input,$max_length=255,$min_length=0) {
-		return !(is_null($input)||empty($input)||strlen($input) > $max_length||strlen($input) < $min_length)
+		return !(is_null($input)||empty($input)||strlen($input) > $max_length||strlen($input) < $min_length);
 	}
 
 	public static function createUser() {
