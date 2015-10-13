@@ -9,7 +9,7 @@ class JobController extends Controller {
 
 	public static function getRequirementsForJob($job_id) {
         $app = \Slim\Slim::getInstance();
-        
+
         try {
             $jobs = \parser\models\Jobs::where('jobid','=',$job_id)->first();
             if ($jobs) {
