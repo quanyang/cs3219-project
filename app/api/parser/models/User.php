@@ -14,4 +14,5 @@ class User extends \Illuminate\Database\Eloquent\Model {
 	 *
 	 * @var array
 	 */
+	public $hidden = ['password'];
 }
