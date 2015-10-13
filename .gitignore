@@ -487,3 +487,13 @@ atlassian-ide-plugin.xml
 com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
+
+.sass-cache
+*.css.map
+*.swp
+composer.phar
+.idea/
+node_modules/
+*.log
+composer.lock
+
