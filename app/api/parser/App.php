@@ -61,8 +61,12 @@ class App {
             });
 
             $app->group('/user', function() use ($app) {
+                
                 $app->post('', 'parser\controllers\UserController::createUser');
+
                 $app->get('', 'parser\controllers\UserController::getUser');
+
+                $app->post('/login', 'parser\controllers\UserController::login');
             });
 
             $app->group('/candidate', function() use ($app) {
