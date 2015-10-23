@@ -12,7 +12,17 @@ class CreateJobsTable extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('jobs', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+            $table->increments('id');
+            $table->string('job_title');
+            $table->string('company_name');
+            $table->string('description');
+            $table->boolean('is_available');
+            $table->decimal('minimum',4,2);
+
+            $table->timestamps();
+        });
     }
 
     /**
@@ -22,6 +32,6 @@ class CreateJobsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('jobs');
     }
 }

@@ -6,8 +6,14 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'CreateApplicationKeywordsTable' => $vendorDir . '/laravel/laravel/database/migrations/2015_10_23_065416_create_application_keywords_table.php',
     'CreateApplicationsTable' => $vendorDir . '/laravel/laravel/database/migrations/2015_10_12_172212_create_applications_table.php',
+    'CreateJobRecruiterTable' => $vendorDir . '/laravel/laravel/database/migrations/2015_10_23_050124_create_job_recruiter_table.php',
+    'CreateJobRequirementsTable' => $vendorDir . '/laravel/laravel/database/migrations/2015_10_23_065422_create_job_requirements_table.php',
     'CreateJobsTable' => $vendorDir . '/laravel/laravel/database/migrations/2015_10_12_172048_create_jobs_table.php',
+    'CreateKeywordCategoriesTable' => $vendorDir . '/laravel/laravel/database/migrations/2015_10_23_050207_create_keyword_categories_table.php',
+    'CreateKeywordRelevanceTable' => $vendorDir . '/laravel/laravel/database/migrations/2015_10_23_065414_create_keyword_relevance_table.php',
+    'CreateKeywordsTable' => $vendorDir . '/laravel/laravel/database/migrations/2015_10_23_065357_create_keywords_table.php',
     'CreateUsersTable' => $vendorDir . '/laravel/laravel/database/migrations/2014_10_12_000000_create_users_table.php',
     'DatabaseSeeder' => $vendorDir . '/laravel/laravel/database/seeds/DatabaseSeeder.php',
     'File_Iterator' => $vendorDir . '/phpunit/php-file-iterator/src/Iterator.php',
@@ -545,5 +551,6 @@ return array(
     'parser\\controllers\\Controller' => $baseDir . '/app/api/parser/controllers/Controller.php',
     'parser\\controllers\\JobController' => $baseDir . '/app/api/parser/controllers/JobController.php',
     'parser\\controllers\\UserController' => $baseDir . '/app/api/parser/controllers/UserController.php',
+    'parser\\models\\Jobs' => $baseDir . '/app/api/parser/models/Jobs.php',
     'parser\\models\\User' => $baseDir . '/app/api/parser/models/User.php',
 );
