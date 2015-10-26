@@ -406,7 +406,7 @@
             <uid><![CDATA[FFCD1146-A4D4-4BCC-A872-A05C3F5F7D9E]]></uid>
         </SQLField>
         <labelWindowIndex><![CDATA[1]]></labelWindowIndex>
-        <temporaryOriginalName><![CDATA[job_moderators]]></temporaryOriginalName>
+        <temporaryOriginalName><![CDATA[job_recruiter]]></temporaryOriginalName>
         <ui.treeExpanded><![CDATA[1]]></ui.treeExpanded>
         <uid><![CDATA[AC32B208-F53F-4DCD-99D2-2D95C8E8F47E]]></uid>
     </SQLTable>

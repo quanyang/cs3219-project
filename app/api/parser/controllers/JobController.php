@@ -11,7 +11,7 @@ class JobController extends Controller {
         $app = \Slim\Slim::getInstance();
 
         try {
-            $jobs = \parser\models\Jobs::where('jobid','=',$job_id)->first();
+            $jobs = \parser\models\Job::where('jobid','=',$job_id)->first();
             if ($jobs) {
                 echo json_encode($jobs, JSON_UNESCAPED_SLASHES);
             } else {

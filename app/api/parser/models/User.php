@@ -15,4 +15,15 @@ class User extends \Illuminate\Database\Eloquent\Model {
 	 * @var array
 	 */
 	public $hidden = ['password'];
+
+	public function applications() {
+		return $this->hasMany('parser\models\Application','user_id','id');
+	}
+
+	public function recruiterFor() {
+		return $this->hasMany('parser\models\Job','job_recruiter','user_id','job_id');
+	}
+
+	
+
 }
