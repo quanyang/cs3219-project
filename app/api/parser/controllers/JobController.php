@@ -7,6 +7,22 @@ class JobController extends Controller {
 	public function __construct() {
 	}
 
+    public static function getAllJobs() {
+        $app = \Slim\Slim::getInstance();
+
+        try {
+            $jobs = \parser\models\Job::where('is_available','=','1')->get();
+            if ($jobs) {
+                echo json_encode($jobs, JSON_UNESCAPED_SLASHES);
+            } else {
+                echo json_encode([], JSON_UNESCAPED_SLASHES);
+            }
+        } catch (\Exception $e) {
+            echo $e;
+            $app->render(500, ['Status' => 'An error occured.']);
+        }
+    }
+
 	public static function getRequirementsForJob($job_id) {
         $app = \Slim\Slim::getInstance();
 

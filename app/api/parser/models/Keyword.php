@@ -8,19 +8,20 @@ class Keyword extends \Illuminate\Database\Eloquent\Model {
 	 *
 	 * @var string
 	 */
-	protected $table = 'keyword';
 	public $timestamps = true;
 	/**
 	 * The attributes excluded from the model's JSON form.
 	 *
 	 * @var array
 	 */
+	protected $appends = ['category'];
+	protected $hidden = ['belongsToCategory'];
 
 	public function relevantTo() {
 		return $this->hasMany('parser\models\Keyword','keyword_relevance','first_keyword','second_keyword')->withPivot('relevance');
 	}
 
-	public function category() {
+	public function belongsToCategory() {
 		return $this->belongsTo('parser\models\KeywordCategory','keyword_category_id','id');
 	}
 
@@ -30,6 +31,10 @@ class Keyword extends \Illuminate\Database\Eloquent\Model {
 
 	public function applications() {
 		return $this->hasMany('parser\models\Application','application_keywords','keyword_id','application_id');
+	}
+
+	public function getCategoryAttribute() {
+		return $this->belongsToCategory;
 	}
 
 }

@@ -8,7 +8,7 @@ class JobRecruiter extends \Illuminate\Database\Eloquent\Model {
 	 *
 	 * @var string
 	 */
-	protected $table = 'job_recruiter';
+	protected $table = 'job_recruiters';
 	public $timestamps = true;
 	/**
 	 * The attributes excluded from the model's JSON form.
