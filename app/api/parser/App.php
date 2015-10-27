@@ -52,7 +52,7 @@ class App {
 
         $app->response->headers->set('Access-Control-Allow-Origin', '*');
 
-        //  http://relive.space/api
+        //
         $app->group('', function() use ($app) {
 
             //  GET: /api
@@ -61,11 +61,11 @@ class App {
             });
 
             $app->group('/user', function() use ($app) {
-                
+                // POST:/api/user
                 $app->post('', 'parser\controllers\UserController::createUser');
-
+                // GET:/api/user
                 $app->get('', 'parser\controllers\UserController::getUser');
-
+                // POST:/api/user/login
                 $app->post('/login', 'parser\controllers\UserController::login');
             });
 
@@ -78,6 +78,9 @@ class App {
             });
 
             $app->group('/job', function() use ($app) {
+                // GET:/api/job
+                $app->get('', 'parser\controllers\JobController::getAllJobs');
+                
                 $app->group('/:job_id', function() use ($app) {
                     $app->group('/requirements', function() use ($app) {
                         //$app->get('', 'parser\controllers\JobController::getRequirementsForJob');
