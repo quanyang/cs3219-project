@@ -28,61 +28,31 @@
           </thead>
 
           <tbody>
-            <tr>
-              <td>Peter Parker</td>
-              <td>72%</td>
-              <td>
-                <a href="#">Skillset</a>
-              </td>
-              <td>
-                <p>
-                  <input name="group1" type="radio" id="selectapplicant" />
-                  <label for="selectapplicant"></label>
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <td>Tony Stark</td>
-              <td>71%</td>
-              <td>
-                <a href="#">Skillset</a>
-              </td>
-              <td>
-                <p>
-                  <input name="group1" type="radio" id="selectapplicant2" />
-                  <label for="selectapplicant2"></label>
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <td>Steve Jobs</td>
-              <td>65%</td>
-              <td>
-                <a href="#">Skillset</a>
-              </td>
-              <td>
-                <p>
-                  <input name="group1" type="radio" id="selectapplicant3" />
-                  <label for="selectapplicant3"></label>
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <td>Mark Zuckerburg</td>
-              <td>53%</td>
-              <td>
-                <a href="#">Skillset</a>
-              </td>
-              <td>
-                <p>
-                  <input name="group1" type="radio" id="selectapplicant4" />
-                  <label for="selectapplicant4"></label>
-                </p>
-              </td>
-            </tr>
+            <div id="list-applicants">
+            </div>
           </tbody>
         </table>
       </form>
     </div>
   </div>
 </div>
+
+<script type="text/javascript">
+$(document).ready(function($) {
+  url = 'api/candidates';
+  $.ajax({
+    type: "GET",
+    url: url,
+          success: function(data){
+            jobs = JSON.parse(data);
+            jobs.forEach(function(job) {
+              $('#list-applicants').innerHTML += '<tr><td>'+job['name']+'</td><td>'+job['minimum']+'</td><td><p><input name="group1" type="checkbox" id="selectapplicant'+job['user_id']+'" /><label for="selectapplicant'+job['user_id']+'"></label></p></td></tr>';
+            });
+          },
+          error: function(data){
+          }
+        });
+
+});
+
+</script>
