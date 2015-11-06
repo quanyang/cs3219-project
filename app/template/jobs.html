@@ -24,9 +24,9 @@ $(document).ready(function($) {
     type: "GET",
     url: url,
           success: function(data){
-            jobs = JSON.parse(data);
+            jobs = data;
             jobs.forEach(function(job) {
-              $('#available-jobs').innerHTML += '<div class="row"><div class="col s12 m4">'+job['job_title']+'</div><div class="col s12 m4">'+job['company_name']+'</div></div>';
+              $('#available-jobs').html($('#available-jobs').html()+'<div class="row"><div class="col s12 m4">'+job.job_title+'</div><div class="col s12 m4">'+job.company_name+'</div></div>');
             });
           },
           error: function(data){
