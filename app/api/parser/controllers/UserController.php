@@ -10,8 +10,6 @@ class UserController extends Controller {
 
 	}
 
-
-
 	public static function login() {
 		$app = \Slim\Slim::getInstance();
 

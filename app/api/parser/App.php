@@ -80,6 +80,7 @@ class App {
             $app->group('/job', function() use ($app) {
                 // GET:/api/job
                 $app->get('', 'parser\controllers\JobController::getAllJobs');
+                $app->post('', 'parser\controllers\JobController::createNewJob');
                 
                 $app->group('/:job_id', function() use ($app) {
                     $app->group('/requirements', function() use ($app) {

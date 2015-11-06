@@ -1,32 +1,35 @@
 <div class="container">
   <div class="section">
-    <div class="row">
-      <form class="col s12">
+    <form class="col s12" id="add_job">
+      <div class="row">
         <div class="row">
           <div class="input-field col s6">
-            <input placeholder="(eg. Software Engineer)" id="job_title" type="text" class="validate">
+            <input placeholder="(eg. Software Engineer)" id="job_title" name="job_title" type="text" class="validate">
             <label for="job_title">Job Title</label>
           </div>
           <div class="input-field col s6">
-            <input id="company" type="text" class="validate">
+            <input id="company" type="text" class="validate" name="company_name" >
             <label for="company">Company</label>
           </div>
         </div>
+        <!--
         <div class="row">
           <div class="input-field col s12">
             <input id="email" type="email" class="validate">
             <label for="email" data-error="invalid" data-success="valid">Email</label>
           </div>
         </div>
-        <div class="row">
-          <div class="input-field col s12">
-            <textarea id="jdtextarea" class="materialize-textarea" length="5000"></textarea>
-            <label for="jdtextarea">Job Description</label>
-          </div>
-        </div>
+      -->
+      <div class="row">
         <div class="input-field col s12">
-          <select>
-            <option value="" disabled selected>Select Score</option>
+          <textarea id="jdtextarea" class="materialize-textarea" length="5000" name="description"></textarea>
+          <label for="jdtextarea">Job Description</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <select name="minimum_score">
+            <option value="0" disabled selected>Select Score</option>
             <option value="10">10%</option>
             <option value="20">20%</option>
             <option value="30">30%</option>
@@ -36,14 +39,19 @@
             <option value="70">70%</option>
             <option value="80">80%</option>
             <option value="90">90%</option>
-            <option value="100">100%</option>
           </select>
           <label>Minimum Score</label>
         </div>
-      </form>
+      </div>
     </div>
-    <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+    <div class="status" style="text-align:center;">
+    </div>
+    <div class="error" style="text-align:center;color:red">
+    </div>
+    <button class="btn waves-effect waves-light" type="submit" value="Submit" name="action">Submit
       <i class="material-icons right">send</i>
     </button>
-  </div>
+  </form>
 </div>
+</div>
+

@@ -4,23 +4,7 @@ if(!session_id()) {
   date_default_timezone_set('Asia/Singapore');
 }
 
-if (isset($_SESSION['name'])) {
-  if (isset($_GET['logout'])) {
-    session_destroy();
-  // If it's desired to kill the session, also delete the session cookie.
-  // Note: This will destroy the session, and not just the session data!
-    if (ini_get('session.use_cookies')) {
-      $params = session_get_cookie_params();
-      setcookie(
-        session_name(),
-        '',
-        time() - 42000,
-        $params['path'], $params['domain'],
-        $params['secure'], $params['httponly']
-        );
-    }
-  }
-
+if (!isset($_SESSION['name'])) {
   header("Location: index.php");
   die();
 }
@@ -37,11 +21,25 @@ include_once('template/footer.html');
 <script type="text/javascript">
 $(document).ready(function() {
     $('jdtextarea').characterCounter();
-  });
-
-$(document).ready(function() {
     $('select').material_select();
-  });
+
+    $('#add_job').submit(function(ev) {
+      var url = "api/job"; // the script where you handle the form input.
+      $.ajax({
+        type: "POST",
+        url: url,
+        data: $("#add_job").serialize(), // serializes the form's elements.
+        success: function(data){
+          document.getElementById("add_job").reset();
+          $('#add_job .status').html("New job added!");
+        },
+        error: function(data){
+          $('#add_job .error').html(data.responseJSON.Status);
+        }
+      });
+      ev.preventDefault();
+    });
+});
 </script>
 
 <script src="js/materialize.js"></script>
