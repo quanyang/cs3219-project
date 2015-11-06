@@ -11,7 +11,11 @@ if (!isset($_SESSION['name'])) {
 include_once('template/header.html');
 include_once('template/nav.html');
 
-include_once('template/jobs.html');
+if (isset($_GET['job_id'])) {
+	include_once('template/application.html');
+} else {
+	include_once('template/jobs.html');
+}
 
 include_once('template/footer.html');
 ?>

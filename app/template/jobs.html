@@ -27,7 +27,7 @@ $(document).ready(function($) {
       jobs = data;
       jobs.forEach(function(job) {
         $('#available-jobs').html(
-          $('#available-jobs').html() + '<div class="card grey lighten-5"><div class="card-content black-text"><span class="card-title black-text">'+job.job_title+' @ '+ job.company_name +'</span><p>'+job.description+'</p></div><div class="card-action"><a href="#" class="teal-text">Apply</a></div></div>');
+          $('#available-jobs').html() + '<div class="card grey lighten-5"><div class="card-content black-text"><span class="card-title black-text">'+job.job_title+' @ '+ job.company_name +'</span><p>'+job.description+'</p></div><div class="card-action"><a href="?job_id='+job.id+'" class="teal-text">Apply</a></div></div>');
       });
     },
     error: function(data){

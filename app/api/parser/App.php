@@ -84,7 +84,7 @@ class App {
                 
                 $app->group('/:job_id', function() use ($app) {
                     $app->group('/requirements', function() use ($app) {
-                        //$app->get('', 'parser\controllers\JobController::getRequirementsForJob');
+                        $app->get('', 'parser\controllers\JobController::getRequirementsForJob');
                         //$app->post('', 'parser\controllers\JobController::addRequirementsToJob');
                         //$app->delete('', 'parser\controllers\JobController::removeRequirementsFromJob');
                     });

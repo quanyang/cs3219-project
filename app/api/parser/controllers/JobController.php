@@ -42,13 +42,14 @@ class JobController extends Controller {
         }
 
         try {
-            $jobs = \parser\models\Job::where('jobid','=',$job_id)->first();
+            $jobs = \parser\models\Job::where('id','=',$job_id)->first();
             if ($jobs) {
                 echo json_encode($jobs, JSON_UNESCAPED_SLASHES);
             } else {
                 $app->render(404, ['Status' => 'Job not found.']);
             }
         } catch (\Exception $e) {
+            print $e;
             $app->render(500, ['Status' => 'An error occured.']);
         }
 	}
@@ -92,7 +93,6 @@ class JobController extends Controller {
 
             echo json_encode($job, JSON_UNESCAPED_SLASHES);
         } catch (\Exception $e) {
-            print $e;
             $app->render(500, ['Status' => 'An error occurred.' ]);
         }
     }
