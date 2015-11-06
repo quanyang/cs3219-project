@@ -4,11 +4,11 @@
       <div class="row">
         <div class="row">
           <div class="input-field col s6">
-            <input placeholder="(eg. Software Engineer)" id="job_title" name="job_title" type="text" class="validate">
+            <input placeholder="(eg. Software Engineer)" id="job_title" name="job_title" type="text" class="validate" required>
             <label for="job_title">Job Title</label>
           </div>
           <div class="input-field col s6">
-            <input id="company" type="text" class="validate" name="company_name" >
+            <input id="company" type="text" class="validate" name="company_name" required>
             <label for="company">Company</label>
           </div>
         </div>
@@ -22,13 +22,13 @@
       -->
       <div class="row">
         <div class="input-field col s12">
-          <textarea id="jdtextarea" class="materialize-textarea" length="5000" name="description"></textarea>
+          <textarea id="jdtextarea" class="materialize-textarea" length="5000" name="description" required></textarea>
           <label for="jdtextarea">Job Description</label>
         </div>
       </div>
       <div class="row">
         <div class="input-field col s12">
-          <select name="minimum_score">
+          <select name="minimum_score" required>
             <option value="0" disabled selected>Select Score</option>
             <option value="10">10%</option>
             <option value="20">20%</option>

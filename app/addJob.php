@@ -31,7 +31,8 @@ $(document).ready(function() {
         data: $("#add_job").serialize(), // serializes the form's elements.
         success: function(data){
           document.getElementById("add_job").reset();
-          $('#add_job .status').html("New job added!");
+          // Should redirect to job page
+          $('#add_job .status').html("Job added!");
         },
         error: function(data){
           $('#add_job .error').html(data.responseJSON.Status);

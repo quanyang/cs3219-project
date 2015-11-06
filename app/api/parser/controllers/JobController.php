@@ -12,8 +12,16 @@ class JobController extends Controller {
     public static function getAllJobs() {
         $app = \Slim\Slim::getInstance();
 
+        if (!\parser\controllers\JobController::isLogin()) {
+            $app->render(401, ['Status' => 'Unauthorised.' ]);
+            return;
+        }
+
         try {
-            $jobs = \parser\models\Job::where('is_available','=','1')->get();
+            $user = \parser\models\User::where('email','=',$_SESSION['email'])->first();
+            $jobs = \parser\models\Job::where('is_available','=','1')->whereNotIn('id', function($query) use ($user) { 
+                $query->select('job_id')->from('job_recruiters')->where('user_id','=',$user->id);
+            })->get();
             if ($jobs) {
                 echo json_encode($jobs, JSON_UNESCAPED_SLASHES);
             } else {
@@ -27,6 +35,11 @@ class JobController extends Controller {
 
 	public static function getRequirementsForJob($job_id) {
         $app = \Slim\Slim::getInstance();
+
+        if (!\parser\controllers\JobController::isLogin()) {
+            $app->render(401, ['Status' => 'Unauthorised.' ]);
+            return;
+        }
 
         try {
             $jobs = \parser\models\Job::where('jobid','=',$job_id)->first();
@@ -66,7 +79,7 @@ class JobController extends Controller {
             $job->job_title = $job_title;
             $job->company_name = $company_name;
             $job->description = $description;
-            $job->minimum = $minimum_score;
+            $job->minimum = intval($minimum_score);
             $job->is_available = 1;
             $job->save();
 

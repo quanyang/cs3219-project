@@ -4,7 +4,7 @@
     <ul class="right hide-on-med-and-down">
       <li><a href="addJob.php">Add Job</a></li>
       <li><a href="viewProfile.php">View Profile</a></li>
-      <li><a href="upload.php">Upload CV</a></li>
+      <li><a href="jobs.php">View Jobs</a></li>
       <?php
         if (isset($_SESSION['name'])) {
           echo '<li id=""><a href="login.php?logout=true">'.$_SESSION['name'].'</a></li>';
@@ -16,8 +16,16 @@
 
     <ul id="nav-mobile" class="side-nav">
       <li><a href="index.php">Home</a></li>
-      <li><a href="upload.php">Upload CV</a></li>
-      <li><a href="login.php">Login</a></li>
+      <li><a href="addJob.php">Add Job</a></li>
+      <li><a href="viewProfile.php">View Profile</a></li>
+      <li><a href="jobs.php">View Jobs</a></li>
+      <?php
+        if (isset($_SESSION['name'])) {
+          echo '<li id=""><a href="login.php?logout=true">'.$_SESSION['name'].'</a></li>';
+        } else {
+          echo '<li id="login"><a href="login.php">Login</a></li>';
+        }
+      ?>
     </ul>
     <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
   </div>
