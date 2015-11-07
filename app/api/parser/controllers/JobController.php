@@ -69,8 +69,11 @@ class JobController extends Controller {
         $allPostVars = $app->request->post();
         $job_title = @$allPostVars['job_title']?@trim(htmlspecialchars($allPostVars['job_title'], ENT_QUOTES, 'UTF-8')):NULL;
         $company_name = @$allPostVars['company_name']?@trim(htmlspecialchars($allPostVars['company_name'], ENT_QUOTES, 'UTF-8')):NULL;
-        $description = @$allPostVars['description']?@trim($allPostVars['description']):NULL;
-        $minimum_score = @$allPostVars['minimum_score']?@trim($allPostVars['minimum_score']):NULL;
+        $description = @$allPostVars['description']?@trim(htmlspecialchars($allPostVars['description'], ENT_QUOTES, 'UTF-8')):NULL;
+        $minimum_score = @$allPostVars['minimum_score']?@trim(htmlspecialchars($allPostVars['minimum_score'], ENT_QUOTES, 'UTF-8')):NULL;
+
+        $description = preg_replace("/(\r?\n)+/s","<br/>",$description);
+
         if ( (intval($minimum_score) > 100 && intval($minimum_score) < 0) || !InputValidator::isValidStringInput($job_title,255,0) || !InputValidator::isValidStringInput($company_name,255,0) || !InputValidator::isValidStringInput($description,5000,0)) {
             $app->render(400, ['Status' => 'Invalid input.' ]);
             return;

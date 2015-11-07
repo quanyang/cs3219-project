@@ -18,6 +18,10 @@
 </div>
 
 <script type="text/javascript">
+function insertText(element, text){
+  element.html(element.html() + text);
+}
+
 $(document).ready(function($) {
   url = 'api/job';
   $.ajax({
@@ -25,9 +29,20 @@ $(document).ready(function($) {
     url: url,
     success: function(data){
       jobs = data;
+      var element = $('#available-jobs');
       jobs.forEach(function(job) {
-        $('#available-jobs').html(
-          $('#available-jobs').html() + '<div class="card grey lighten-5"><div class="card-content black-text"><span class="card-title black-text">'+job.job_title+' @ '+ job.company_name +'</span><p>'+job.description+'</p></div><div class="card-action"><a href="?job_id='+job.id+'" class="teal-text">Apply</a></div></div>');
+
+        var htmlCode = '<div class="card grey lighten-5"><div class="card-content black-text"><span class="card-title black-text">'+job.job_title+' @ '+ job.company_name +'</span><p>'+job.description.substring(0,255)+'</p>';
+
+        htmlCode += '<br/>Key skill(s): ';
+
+        job.requirements.forEach(function (e) {
+          htmlCode+='<div class="chip">'+e.keyword.keyword+'</div>';
+        });
+
+        htmlCode += '</div><div class="card-action"><a href="?job_id='+job.id+'" class="teal-text">Apply</a></div></div>';
+
+        insertText(element,htmlCode);
       });
     },
     error: function(data){
