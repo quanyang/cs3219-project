@@ -17,6 +17,38 @@
                 <h5>Key skill(s): </h5>
                 <span class="keyskills">
                 </span>
+                <br/>
+                <br/>
+                <form name="application">
+                  <div class="input-field">
+                    <i class="material-icons prefix">person_pin</i>
+                    <input id="icon_name" type="text" class="validate" value="<?php echo $_SESSION['name']; ?>" disabled>
+                    <label for="icon_name">Full Name</label>
+                  </div>
+                  <div class="input-field">
+                    <i class="material-icons prefix">email</i>
+                    <input id="icon_email" type="email" class="validate" value="<?php echo $_SESSION['email']; ?>" disabled>
+                    <label for="icon_email">Email</label>
+                  </div>
+                  <div class="input-field">
+                    <i class="material-icons prefix">phone</i>
+                    <input id="icon_telephone" type="tel" class="validate">
+                    <label for="icon_telephone">Telephone</label>
+                  </div>
+                  <div class="file-field input-field">
+                    <div class="btn light-blue darken-2">
+                      <span>Resume</span>
+                      <i class="material-icons left">description</i>
+                      <input type="file" name="resume" >
+                    </div>
+                    <div class="file-path-wrapper">
+                      <input class="file-path validate" type="text">
+                    </div>
+                  </div>
+                  <button class="btn waves-effect waves-light light-blue darken-2" type="submit" name="action">Apply
+                    <i class="material-icons right">work</i>
+                  </button>
+                </form>
               </div>
             </div>
           </div>
@@ -43,8 +75,8 @@ $(document).ready(function($) {
       $('.company').html("Company Name: "+job.company_name);
       $('.description').html(job.description);
       job.requirements.forEach(function (e) {
-          if (e.is_required === 1 && e.is_available === 1) {
-            $('.keyskills').append('<div class="chip teal white-text">'+e.keyword.keyword+'</div>');
+          if (e.is_available === 1) {
+            $('.keyskills').append('<div class="chip light-blue darken-2 white-text">'+e.keyword.keyword+'</div>');
           }
         });
     },
