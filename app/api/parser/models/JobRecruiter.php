@@ -15,4 +15,12 @@ class JobRecruiter extends \Illuminate\Database\Eloquent\Model {
 	 *
 	 * @var array
 	 */
+
+	public function user() {
+		return $this->belongsTo('parser\models\User','user_id','id');
+	}
+
+	public function job() {
+		return $this->belongsTo('parser\models\Job');
+	}
 }

@@ -21,7 +21,7 @@ class Job extends \Illuminate\Database\Eloquent\Model
         return $this->hasMany('parser\models\JobRequirement');
     }
     public function jobrecruitersrelationship() {
-        return $this->hasManyThrough('parser\models\User','parser\models\JobRecruiter','job_id','id');
+        return $this->hasMany('parser\models\JobRecruiter','job_id','id');
     }
 
     public function getRequirementsAttribute() {
@@ -29,6 +29,11 @@ class Job extends \Illuminate\Database\Eloquent\Model
     }
 
     public function getRecruitersAttribute() {
-        return $this->jobrecruitersrelationship;
+        $recruiters = [];
+        foreach($this->jobrecruitersrelationship as $recruiter) {
+            array_push($recruiters,$recruiter->user);
+        }
+
+        return $recruiters;
     }
 }

@@ -9,6 +9,35 @@ class JobController extends Controller {
 	public function __construct() {
 	}
 
+    public static function getAllRecruitmentPosts() {
+        $app = \Slim\Slim::getInstance();
+
+        if (!\parser\controllers\JobController::isLogin()) {
+            $app->render(401, ['Status' => 'Unauthorised.' ]);
+            return;
+        }
+
+        try {
+            $user = \parser\models\User::where('email','=',$_SESSION['email'])->first();
+            if ($user) {
+                $jobs = \parser\models\Job::whereIn('id', function($query) use ($user) { 
+                    $query->select('job_id')->from('job_recruiters')->where('user_id','=',$user->id);
+                })->get();
+                if ($jobs) {
+                    echo json_encode($jobs, JSON_UNESCAPED_SLASHES);
+                } else {
+                    echo json_encode([], JSON_UNESCAPED_SLASHES);
+                }
+            } else {
+                $app->render(500, ['Status' => 'An error occured.']);
+                return;
+            }
+        } catch (\Exception $e) {
+            $app->render(500, ['Status' => 'An error occured.']);
+            return;
+        }
+    }
+
     public static function getAllJobs() {
         $app = \Slim\Slim::getInstance();
 
@@ -22,6 +51,8 @@ class JobController extends Controller {
             if ($user) {
                 $jobs = \parser\models\Job::where('is_available','=','1')->whereNotIn('id', function($query) use ($user) { 
                     $query->select('job_id')->from('job_recruiters')->where('user_id','=',$user->id);
+                })->whereNotIn('id', function($query) use ($user) { 
+                    $query->select('job_id')->from('applications')->where('user_id','=',$user->id);
                 })->get();
                 if ($jobs) {
                     echo json_encode($jobs, JSON_UNESCAPED_SLASHES);
@@ -33,6 +64,7 @@ class JobController extends Controller {
                 return;
             }
         } catch (\Exception $e) {
+            print $e;
             $app->render(500, ['Status' => 'An error occured.']);
             return;
         }

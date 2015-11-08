@@ -76,8 +76,10 @@ class App {
                 });
             });
 
-            $app->group('/candidates', function() use ($app) {
-                
+            $app->group('/recruiter', function() use($app) {
+                $app->group('/job', function() use ($app) {
+                    $app->get('', 'parser\controllers\JobController::getAllRecruitmentPosts');    
+                });
             });
 
             $app->group('/job', function() use ($app) {
