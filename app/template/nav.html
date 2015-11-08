@@ -3,11 +3,10 @@
   <div class="nav-wrapper container">
     <a id="logo-container" href="index.php" class="brand-logo">Jobr</a>
     <ul class="right hide-on-med-and-down">
-      <li><a href="addJob.php">Add Job</a></li>
-      <li><a href="viewProfile.php">View Profile</a></li>
-      <li><a href="jobs.php">View Jobs</a></li>
       <?php
         if (isset($_SESSION['name'])) {
+          echo '<li><a href="viewProfile.php">View Posted Jobs</a></li>
+      <li><a href="jobs.php">View Available Jobs</a></li>';
           echo '<li id=""><a href="login.php?logout=true">'.$_SESSION['name'].'</a></li>';
         } else {
           echo '<li id="login"><a href="login.php">Login</a></li>';
@@ -17,9 +16,6 @@
 
     <ul id="nav-mobile" class="side-nav">
       <li><a href="index.php">Home</a></li>
-      <li><a href="addJob.php">Add Job</a></li>
-      <li><a href="viewProfile.php">View Profile</a></li>
-      <li><a href="jobs.php">View Jobs</a></li>
       <?php
         if (isset($_SESSION['name'])) {
           echo '<li id=""><a href="login.php?logout=true">'.$_SESSION['name'].'</a></li>';

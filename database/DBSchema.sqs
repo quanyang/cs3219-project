@@ -124,7 +124,7 @@
         </location>
         <size>
             <width>232.00</width>
-            <height>60.00</height>
+            <height>80.00</height>
         </size>
         <zorder>5</zorder>
         <SQLField>
@@ -151,6 +151,12 @@
             <notNull><![CDATA[0]]></notNull>
             <temporaryOriginalName><![CDATA[job_id]]></temporaryOriginalName>
             <uid><![CDATA[B3F97392-1706-46C6-89E7-6AC3C9AA3B49]]></uid>
+        </SQLField>
+        <SQLField>
+            <name><![CDATA[keyword]]></name>
+            <type><![CDATA[VARCHAR(255)]]></type>
+            <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
+            <uid><![CDATA[0BFA629F-2A4B-4A6B-A22C-17D82B0D0846]]></uid>
         </SQLField>
         <labelWindowIndex><![CDATA[5]]></labelWindowIndex>
         <temporaryOriginalName><![CDATA[keyword]]></temporaryOriginalName>
@@ -287,6 +293,21 @@
             <type><![CDATA[VARCHAR(255)]]></type>
             <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
             <uid><![CDATA[C568B367-EED1-4038-844D-7DCE169189D7]]></uid>
+        </SQLField>
+        <SQLField>
+            <name><![CDATA[job_id]]></name>
+            <type><![CDATA[int(11)]]></type>
+            <referencesField>id</referencesField>
+            <referencesTable>jobs</referencesTable>
+            <referencesField><![CDATA[id]]></referencesField>
+            <referencesTable><![CDATA[jobs]]></referencesTable>
+            <sourceCardinality>0</sourceCardinality>
+            <destinationCardinality>0</destinationCardinality>
+            <referencesFieldUID><![CDATA[CCC2C14F-8E9F-4BF6-B011-F37557467107]]></referencesFieldUID>
+            <referencesTableUID><![CDATA[C2B885D7-B3D4-43BE-B216-640898133185]]></referencesTableUID>
+            <notNull><![CDATA[1]]></notNull>
+            <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
+            <uid><![CDATA[54812F99-318B-43E5-A354-9F704429CED1]]></uid>
         </SQLField>
         <labelWindowIndex><![CDATA[8]]></labelWindowIndex>
         <table_character_set><![CDATA[latin1]]></table_character_set>

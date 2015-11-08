@@ -8,7 +8,7 @@ class Application extends \Illuminate\Database\Eloquent\Model {
 	 *
 	 * @var string
 	 */
-	public $timestamps = true;
+	public $timestamps = false;
 	/**
 	 * The attributes excluded from the model's JSON form.
 	 *

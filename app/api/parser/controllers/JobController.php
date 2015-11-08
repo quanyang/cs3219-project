@@ -19,17 +19,22 @@ class JobController extends Controller {
 
         try {
             $user = \parser\models\User::where('email','=',$_SESSION['email'])->first();
-            $jobs = \parser\models\Job::where('is_available','=','1')->whereNotIn('id', function($query) use ($user) { 
-                $query->select('job_id')->from('job_recruiters')->where('user_id','=',$user->id);
-            })->get();
-            if ($jobs) {
-                echo json_encode($jobs, JSON_UNESCAPED_SLASHES);
+            if ($user) {
+                $jobs = \parser\models\Job::where('is_available','=','1')->whereNotIn('id', function($query) use ($user) { 
+                    $query->select('job_id')->from('job_recruiters')->where('user_id','=',$user->id);
+                })->get();
+                if ($jobs) {
+                    echo json_encode($jobs, JSON_UNESCAPED_SLASHES);
+                } else {
+                    echo json_encode([], JSON_UNESCAPED_SLASHES);
+                }
             } else {
-                echo json_encode([], JSON_UNESCAPED_SLASHES);
+                $app->render(500, ['Status' => 'An error occured.']);
+                return;
             }
         } catch (\Exception $e) {
-            echo $e;
             $app->render(500, ['Status' => 'An error occured.']);
+            return;
         }
     }
 
