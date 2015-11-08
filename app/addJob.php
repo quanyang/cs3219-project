@@ -5,7 +5,7 @@ if(!session_id()) {
 }
 
 if (!isset($_SESSION['name'])) {
-  header("Location: index.php");
+  header("Location: login.php");
   die();
 }
 

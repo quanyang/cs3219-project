@@ -5,7 +5,7 @@ if(!session_id()) {
 }
 
 if (!isset($_SESSION['name'])) {
-  header("Location: index.php");
+  header("Location: login.php");
   die();
 }
 
@@ -15,6 +15,7 @@ include_once('template/nav.html');
 include_once('template/viewJobs.html');
 
 include_once('template/footer.html');
+
 ?>
 
 <!--  Scripts-->

@@ -5,14 +5,14 @@ if(!session_id()) {
 }
 
 if (!isset($_SESSION['name'])) {
-  header("Location: index.php");
+  header("Location: login.php");
   die();
 }
 
 include_once('template/header.html');
 include_once('template/nav.html');
 
-include_once('template/viewProfile.html');
+include_once('template/viewPost.html');
 
 include_once('template/footer.html');
 ?>

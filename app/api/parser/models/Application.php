@@ -15,14 +15,20 @@ class Application extends \Illuminate\Database\Eloquent\Model {
 	 * @var array
 	 */
 
+	protected $appends = ['user'];
+	protected $hidden = ['applicant'];
+
 	public function applicant() {
-		return $this->hasOne('parser\models\User');
+		return $this->hasOne('parser\models\User','id','user_id');
 	}
 
 	public function resumeKeywords() {
 		return $this->hasMany('parser\models\Keyword','application_keywords','application_id','keyword_id');
 	}
 
+	public function getUserAttribute() {
+        return $this->applicant;
+    }
 	
 
 }

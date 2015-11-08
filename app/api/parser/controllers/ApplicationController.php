@@ -9,6 +9,39 @@ class ApplicationController extends Controller {
 	public function __construct() {
 	}
 
+    public static function getApplicationsForJob($job_id) {
+        $app = \Slim\Slim::getInstance();
+
+        if (!\parser\controllers\ApplicationController::isLogin()) {
+            $app->render(401, ['Status' => 'Unauthorised.' ]);
+            return;
+        }
+
+        try {
+            $job  = \parser\models\Job::where('id','=',$job_id)->first();
+            $user = \parser\models\User::where('email','=',$_SESSION['email'])->first();
+            if ($user && $job) {
+                $job_recruiter = \parser\models\JobRecruiter::where('job_id','=',$job->id)->where('user_id','=',$user->id)->get()->toArray();
+                if (sizeof($job_recruiter) > 0) {
+                    //ensure access rights
+                    $candidates = \parser\models\Application::where('job_id','=',$job->id)->get()->toArray();
+
+                    echo json_encode($candidates, JSON_UNESCAPED_SLASHES);
+                } else {
+                    $app->render(401, ['Status' => 'Unauthorised.' ]);
+                    return;
+                }
+            } else {
+                $app->render(401, ['Status' => 'Unauthorised.' ]);
+                return;
+            }     
+        } catch (\Exception $e) {
+            print $e;
+            $app->render(500, ['Status' => 'An error occurred.' ]);
+            return;
+        }
+    }
+
     public static function hasAppliedForJobBefore($job_id) {
         $app = \Slim\Slim::getInstance();
 
