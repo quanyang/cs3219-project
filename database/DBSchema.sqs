@@ -154,7 +154,7 @@
         </SQLField>
         <SQLField>
             <name><![CDATA[keyword]]></name>
-            <type><![CDATA[VARCHAR(255)]]></type>
+            <type><![CDATA[INTEGER]]></type>
             <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
             <uid><![CDATA[0BFA629F-2A4B-4A6B-A22C-17D82B0D0846]]></uid>
         </SQLField>
@@ -675,7 +675,7 @@ D05TU2NhbGluZ0ZhY3RvcoaShKOeqKIBhpKEmZkLTlNQYXBlck5hbWWGkoSZmQZp
 c28tYTSGhoY=
 ]]></encodedPrintInfo>
         <autoSizeTablesOption><![CDATA[0]]></autoSizeTablesOption>
-        <documentScaleFactor><![CDATA[0.998]]></documentScaleFactor>
+        <documentScaleFactor><![CDATA[1.748]]></documentScaleFactor>
         <exportDialect><![CDATA[mysql]]></exportDialect>
         <fileversion><![CDATA[3.1]]></fileversion>
         <generator><![CDATA[com.malcolmhardie.sqleditor]]></generator>
@@ -691,9 +691,10 @@ c28tYTSGhoY=
         <windowHeight><![CDATA[727.000000]]></windowHeight>
         <windowLocationX><![CDATA[50.000000]]></windowLocationX>
         <windowLocationY><![CDATA[41.000000]]></windowLocationY>
-        <windowScrollOrigin><![CDATA[{0, 0}]]></windowScrollOrigin>
+        <windowScrollOrigin><![CDATA[{696, 1217}]]></windowScrollOrigin>
         <windowWidth><![CDATA[1151.000000]]></windowWidth>
     </SQLDocumentInfo>
     <AllowsIndexRenamingOnInsert><![CDATA[1]]></AllowsIndexRenamingOnInsert>
     <containerName><![CDATA[model controller orginal container]]></containerName>
+    <defaultLabelHidden><![CDATA[1]]></defaultLabelHidden>
 </SQLContainer>
