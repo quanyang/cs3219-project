@@ -181,7 +181,6 @@ class JobController extends Controller {
             }
 
         } catch (\Exception $e) {
-            print $e;
             $app->render(500, ['Status' => 'An error occurred.' ]);
             return;
         }
@@ -228,7 +227,6 @@ class JobController extends Controller {
             }
 
         } catch (\Exception $e) {
-            print $e;
             $app->render(500, ['Status' => 'An error occurred.' ]);
             return;
         }

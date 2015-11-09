@@ -136,12 +136,29 @@ $.ajax({
   success: function(data){
     applicants = data;
     applicants.forEach(function(applicant) {
-      $('#list-applicants').append('<tr><td>'+applicant.user.name+'</td><td>'+applicant.score+'%</td><td><a target="_blank" href="api/resume/'+applicant.id+'/download">View Resume</a><br/><br/><a class="modal-trigger" href="#modal'+applicant.user_id+'">View more details</a></td><td><p><input name="group1" type="checkbox" id="selectapplicant'+applicant.user_id+'" /><label for="selectapplicant'+applicant.user_id+'"></label></p></td></tr>');
+      $('#list-applicants').append('<tr><td>'+applicant.user.name+'</td><td>'+applicant.score+'%</td><td><a target="_blank" href="api/resume/'+applicant.id+'/download">View Resume</a><br/><br/><a class="modal-trigger" href="#modal'+applicant.user_id+'">View more details</a></td><td><p><input name="action" type="checkbox" class="selectapplicant" id="'+applicant.id+'" value="1" '+(applicant.is_selected?"checked":"")+'/><label for="'+applicant.id+'"></label></p></td></tr>');
 
       $('.modals').append('<div id="modal'+applicant.user_id+'" class="modal"><div class="modal-content"><h4>Applicant details</h4><p>Name: '+applicant.user.name+'</br>Email: '+applicant.user.email+'</br>Contact Number: '+applicant.contact+'</p><h5>Skillset: </h5><span class="skills'+applicant.user_id+'"></span></div><div class="modal-footer"><a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Close</a></div></div>');
 
       applicant.resume_keywords.forEach(function (e) {
         $('.skills'+applicant.user_id).append('<div class="chip light-blue darken-2 white-text">'+e.keyword.keyword+'</div> ');
+      });
+
+      $('.selectapplicant').click(function(ev) {
+        var formData = $(this).serialize()+"&applicant="+$(this).attr('id');
+        var url = 'api/job/<?php echo $_GET["id"]; ?>/applicant';
+        $.ajax({
+          type: "POST",
+          url: url,
+          data: formData, // serializes the form's elements.
+          success: function(data){
+            window.location.href ='';
+          },
+          error: function(data){
+            json = JSON.parse(data.responseText);
+            alert(json.Status);
+          }
+        });
       });
     });
     $('.modal-trigger').leanModal();

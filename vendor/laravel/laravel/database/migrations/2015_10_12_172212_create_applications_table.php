@@ -22,8 +22,8 @@ class CreateApplicationsTable extends Migration
             $table->integer('job_id')->unsigned();
             $table->string('email');
             $table->string('name');
-            $table->boolean('isParsed')->default(0);
-            $table->boolean('isSelected')->default(0);
+            $table->boolean('is_parsed')->default(0);
+            $table->boolean('is_selected')->default(0);
         });
 
         Schema::table('applications', function($table) {

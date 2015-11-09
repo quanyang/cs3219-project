@@ -9,6 +9,50 @@ class ApplicationController extends Controller {
 	public function __construct() {
 	}
 
+    public static function acceptApplicantForJob($job_id) {
+        $app = \Slim\Slim::getInstance();
+
+        if (!\parser\controllers\ApplicationController::isLogin()) {
+            $app->render(401, ['Status' => 'Unauthorised.' ]);
+            return;
+        }
+
+        $allPostVars = $app->request->post();
+        $application_id = @$allPostVars['applicant']?@trim(htmlspecialchars($allPostVars['applicant'], ENT_QUOTES, 'UTF-8')):NULL;
+        $action = @$allPostVars['action']?1:0;
+
+        if ( !preg_match('/^\d+$/',$application_id) || !preg_match('/^\d+$/',$action)) {
+            $app->render(400, ['Status' => 'Invalid input.' ]);
+            return;
+        }
+
+        try {
+            $user = \parser\models\User::where('email','=',$_SESSION['email'])->first();
+            $job  = \parser\models\Job::where('id','=',$job_id)->whereIn('id', function($query) use ($user) { 
+                    $query->select('job_id')->from('job_recruiters')->where('user_id','=',$user->id);
+                })->first();
+            //checks for permission to modify job
+            if ($user && $job) {
+                $application = \parser\models\Application::where('id','=',$application_id)->where('job_id','=',$job->id)->first();
+                if ($application) {
+                    $application->is_selected = $action;
+                    $application->save();
+                    echo json_encode($application, JSON_UNESCAPED_SLASHES);
+                } else {
+                    $app->render(401, ['Status' => 'Unauthorised.' ]);
+                    return;
+                }
+            } else {
+                $app->render(401, ['Status' => 'Unauthorised.' ]);
+                return;
+            }
+
+        } catch (\Exception $e) {
+            $app->render(500, ['Status' => 'An error occurred.' ]);
+            return;
+        }
+    }
+
     public static function jobsAppliedBefore() {
         $app = \Slim\Slim::getInstance();
 

@@ -74,7 +74,6 @@ private function addDefaultRoutes() {
                 $app->post('', 'parser\controllers\ApplicationController::applyForJob');
                 $app->get('', 'parser\controllers\ApplicationController::hasAppliedForJobBefore');
             });
-
             $app->get('', 'parser\controllers\ApplicationController::jobsAppliedBefore');
         });
 
@@ -102,6 +101,10 @@ private function addDefaultRoutes() {
             $app->post('', 'parser\controllers\JobController::createNewJob');
 
             $app->group('/:job_id', function() use ($app) {
+
+                $app->group('/applicant', function() use ($app) {
+                    $app->post('', 'parser\controllers\ApplicationController::acceptApplicantForJob');
+                });
 
                 $app->group('/requirements', function() use ($app) {
                     $app->get('', 'parser\controllers\JobController::getRequirementsForJob');

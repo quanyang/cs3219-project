@@ -323,15 +323,15 @@
             <uid><![CDATA[675A685F-3D21-4F34-B7B7-A8E698234069]]></uid>
         </SQLField>
         <SQLField>
-            <name><![CDATA[isParsed]]></name>
+            <name><![CDATA[is_parsed]]></name>
             <type><![CDATA[TINYINT]]></type>
-            <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
+            <temporaryOriginalName><![CDATA[isParsed]]></temporaryOriginalName>
             <uid><![CDATA[B6D50394-1980-41BE-920B-F58E219A037F]]></uid>
         </SQLField>
         <SQLField>
-            <name><![CDATA[isSelected]]></name>
+            <name><![CDATA[is_selected]]></name>
             <type><![CDATA[TINYINT]]></type>
-            <temporaryOriginalName><![CDATA[status]]></temporaryOriginalName>
+            <temporaryOriginalName><![CDATA[isSelected]]></temporaryOriginalName>
             <uid><![CDATA[2CE250F8-BAEC-43BA-858D-6E7720923821]]></uid>
         </SQLField>
         <labelWindowIndex><![CDATA[8]]></labelWindowIndex>
