@@ -15,7 +15,8 @@
           </span>
           <br/>
           <br/>
-
+          <div class="modals">
+          </div>
           <form action="#">
             <table class="responsive-table">
               <thead>
@@ -50,7 +51,7 @@ $.ajax({
     $('.description').html(job.description);
     job.requirements.forEach(function (e) {
       if (e.is_available === 1) {
-        $('.keyskills').append('<div class="chip light-blue darken-2 white-text">'+e.keyword.keyword+'</div>');
+        $('.keyskills').append('<div class="chip light-blue darken-2 white-text">'+e.keyword.keyword+'</div> ');
       }
     });
   },
@@ -65,8 +66,12 @@ $.ajax({
     success: function(data){
       candidates = data;
       candidates.forEach(function(candidate) {
-        $('#list-applicants').append('<tr><td>'+candidate.user.name+'</td><td>0%</td><td><a href="">View Resume</a></td><td><p><input name="group1" type="checkbox" id="selectapplicant'+candidate.user_id+'" /><label for="selectapplicant'+candidate.user_id+'"></label></p></td></tr>');
+        $('#list-applicants').append('<tr><td>'+candidate.user.name+'</td><td>0%</td><td><a target="_blank" href="api/resume/'+candidate.id+'/download">View Resume</a><br/><a class="modal-trigger" href="#modal'+candidate.user_id+'">View more details</a></td><td><p><input name="group1" type="checkbox" id="selectapplicant'+candidate.user_id+'" /><label for="selectapplicant'+candidate.user_id+'"></label></p></td></tr>');
+
+        $('.modals').append('<div id="modal'+candidate.user_id+'" class="modal"><div class="modal-content"><h4>Candidate details</h4><p>Name: '+candidate.user.name+'</br>Email: '+candidate.user.email+'</br>Contact Number: '+candidate.contact+'</p></div><div class="modal-footer"><a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Close</a></div></div>');
+
       });
+      $('.modal-trigger').leanModal();
     },
     error: function(data){
     }

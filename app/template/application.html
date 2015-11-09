@@ -133,7 +133,7 @@ $.ajax({
     $('.description').html(job.description);
     job.requirements.forEach(function (e) {
       if (e.is_available === 1) {
-        $('.keyskills').append('<div class="chip light-blue darken-2 white-text">'+e.keyword.keyword+'</div>');
+        $('.keyskills').append('<div class="chip light-blue darken-2 white-text">'+e.keyword.keyword+'</div> ');
       }
     });
   },
