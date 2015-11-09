@@ -9,6 +9,43 @@ class ApplicationController extends Controller {
 	public function __construct() {
 	}
 
+    public static function jobsAppliedBefore() {
+        $app = \Slim\Slim::getInstance();
+
+        if (!\parser\controllers\ApplicationController::isLogin()) {
+            $app->render(401, ['Status' => 'Unauthorised.' ]);
+            return;
+        }
+
+        try {
+            $user = \parser\models\User::where('email','=',$_SESSION['email'])->first();
+            if ($user) {
+                $job_applications = \parser\models\Application::where('user_id','=',$user->id)->get()->toArray();
+                $job_applications_buffer = [];
+                foreach ($job_applications as $application) {
+
+                    $job = \parser\models\Job::where('id','=',$application['job_id'])->first()->toArray();
+                    unset($application['score']);
+                    $application['job'] = $job;
+                    array_push($job_applications_buffer,$application);
+                }
+                if ($job_applications) {
+                    echo json_encode($job_applications_buffer, JSON_UNESCAPED_SLASHES);
+                } else {
+                    $app->render(404, ['Status' => 'Job application not found.']);
+                    return;
+                }
+            } else {
+                throw new \Exception('User not found!');
+            }     
+
+        } catch (\Exception $e) {
+            print $e;
+            $app->render(500, ['Status' => 'An error occurred.' ]);
+            return;
+        }
+    }
+
     public static function downloadResume($application_id) {
         $app = \Slim\Slim::getInstance();
 

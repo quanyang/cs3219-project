@@ -17,8 +17,8 @@ class CreateJobRequirementsTable extends Migration
             $table->increments('id');
             $table->integer('job_id')->unsigned();
             $table->integer('keyword_id')->unsigned();
-            $table->boolean('is_required');
-            $table->boolean('is_available');
+            $table->boolean('is_required')->default(0);
+            $table->boolean('is_available')->default(1);
             $table->decimal('weightage',5,2);
         });
 

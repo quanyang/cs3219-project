@@ -103,8 +103,6 @@ $(document).ready(function($) {
             },
             success: function(data){
         // Should redirect to job page
-        $('#application').hide();
-        $('.applied_before').show();
         document.getElementById("application").reset();
         $('#application .error').html("");
         $('#application .status').html("Application successful! You will be contacted if there is a good fit.");

@@ -18,7 +18,7 @@ class CreateJobsTable extends Migration
             $table->string('job_title');
             $table->string('company_name');
             $table->text('description');
-            $table->boolean('is_available');
+            $table->boolean('is_available')->default(1);
             $table->decimal('minimum',4,2);
 
             $table->timestamps();

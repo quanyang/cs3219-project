@@ -20,7 +20,12 @@ class CreateApplicationsTable extends Migration
             $table->string('contact',150);
             $table->string('resume_path',255);
             $table->integer('job_id')->unsigned();
+            $table->string('email');
+            $table->string('name');
+            $table->boolean('isParsed')->default(0);
+            $table->boolean('isSelected')->default(0);
         });
+
         Schema::table('applications', function($table) {
             $table->foreign('job_id')->references('id')->on('jobs')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

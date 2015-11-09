@@ -16,7 +16,7 @@
         <div class="icon-block">
           <h4 class="center brown-text"><i class="material-icons prefix">info</i> Status</h4>
 
-          <div id="available-jobs">
+          <div id="applied-jobs">
 
           </div>
         </div>
@@ -32,6 +32,25 @@ function insertText(element, text){
 }
 
 $(document).ready(function($) {
+  url = 'api/application';
+  $.ajax({
+    type: "GET",
+    url: url,
+    success: function(data){
+      applications = data;
+      var element = $('#applied-jobs');
+      applications.forEach(function(application) {
+        job = application.job;
+        var htmlCode = '<div class="card grey lighten-5"><div class="card-content black-text"><span class="black-text">'+job.job_title+' @ '+ job.company_name +'</span>';
+        htmlCode += '</div>';
+
+        insertText(element,htmlCode);
+      });
+    },
+    error: function(data){
+    }
+  });
+
   url = 'api/job';
   $.ajax({
     type: "GET",

@@ -74,6 +74,8 @@ private function addDefaultRoutes() {
                 $app->post('', 'parser\controllers\ApplicationController::applyForJob');
                 $app->get('', 'parser\controllers\ApplicationController::hasAppliedForJobBefore');
             });
+
+            $app->get('', 'parser\controllers\ApplicationController::jobsAppliedBefore');
         });
 
         $app->group('/candidates', function() use ($app) {
