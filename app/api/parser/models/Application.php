@@ -15,7 +15,7 @@ class Application extends \Illuminate\Database\Eloquent\Model {
 	 * @var array
 	 */
 
-	protected $appends = ['user'];
+	protected $appends = ['user','keywords','score'];
 	protected $hidden = ['applicant'];
 
 	public function applicant() {
@@ -23,12 +23,31 @@ class Application extends \Illuminate\Database\Eloquent\Model {
 	}
 
 	public function resumeKeywords() {
-		return $this->hasMany('parser\models\Keyword','application_keywords','application_id','keyword_id');
+		return $this->hasMany('parser\models\ApplicationKeyword','application_id','id');
 	}
 
 	public function getUserAttribute() {
         return $this->applicant;
     }
-	
+
+    public function getKeywordsAttribute() {
+    	$keywords = [];
+		foreach($this->resumeKeywords as $keyword) {
+			array_push($keywords,$keyword->keyword->keyword);
+		}
+		return $keywords;
+    }
+
+	public function getScoreAttribute() {
+
+		$totalScore = \parser\models\JobRequirement::where('job_id','=',$this->job_id)->sum('weightage');
+
+		$score = \parser\models\JobRequirement::where('job_id','=',$this->job_id)->WhereIn('keyword_id', function($query) { 
+                    $query->select('id')->from('keywords')->whereIn('id', function($query2) {
+                    	$query2->select('keyword_id')->from('application_keywords')->where('application_id','=',$this->id);
+                    });
+                })->sum('weightage');
+		return $score/$totalScore*100;
+	}	
 
 }

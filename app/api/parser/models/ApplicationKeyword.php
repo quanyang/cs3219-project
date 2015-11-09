@@ -15,4 +15,9 @@ class ApplicationKeyword extends \Illuminate\Database\Eloquent\Model {
 	 *
 	 * @var array
 	 */
+
+
+	public function keyword() {
+		return $this->hasOne('parser\models\Keyword','id','keyword_id');
+	}
 }
