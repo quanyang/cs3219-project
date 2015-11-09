@@ -40,8 +40,8 @@ class Application extends \Illuminate\Database\Eloquent\Model {
 
 	public function getScoreAttribute() {
 
-		$totalScore = \parser\models\JobRequirement::where('job_id','=',$this->job_id)->sum('weightage');
-		$score = \parser\models\JobRequirement::where('job_id','=',$this->job_id)->WhereIn('keyword_id', function($query) { 
+		$totalScore = \parser\models\JobRequirement::where('job_id','=',$this->job_id)->where('is_available','=',1)->sum('weightage');
+		$score = \parser\models\JobRequirement::where('is_available','=',1)->where('job_id','=',$this->job_id)->WhereIn('keyword_id', function($query) { 
 			$query->select('id')->from('keywords')->whereIn('id', function($query2) {
 				$query2->select('keyword_id')->from('application_keywords')->where('application_id','=',$this->id);
 			});

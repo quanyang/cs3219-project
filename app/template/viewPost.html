@@ -10,12 +10,48 @@
           <span class="black-text description">
           </span>
 
-          <h5>Required skill(s): </h5>
-          <span class="required-keyskills">
-          </span>
-          <h5>Not required skill(s): </h5>
-          <span class="keyskills">
-          </span>
+          
+          <table class="responsive-table">
+            <thead>
+              <tr>
+                <th data-field="requirement">Requirement</th>
+                <th data-field="weightage">Weightage (to 2 decimal points)</th>
+                <th data-field="required">Required?</th>
+                <th data-field="delete">Enabled?</th>
+                <th data-field="save">Save</th>
+              </tr>
+            </thead>
+            <tbody id="list-requirements">
+            </tbody>
+            <tbody>
+                <tr>
+                  <td>
+                    <div class="col s12">
+                      <input placeholder="Keyword" name="keyword" id="keyword" type="text" class="validate" required>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="col s8">
+                      <input placeholder="10.00" id="weightage" name="weightage" type="text" class="validate" required>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="switch">
+                      <label>No<input name="is_required" type="checkbox" checked><span class="lever"></span>Yes</label>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="switch">
+                      <label>No<input type="checkbox" name="is_available" checked><span class="lever"></span>Yes</label>
+                    </div>
+                  </td>
+                  <td>
+                    <button class="btn waves-effect waves-light add-requirements" type="submit" name="action">Add</button>
+                  </td>
+                </tr>
+              </tbody>
+          </table>
+
           <br/>
           <br/>
           <div class="modals">
@@ -27,10 +63,9 @@
                   <th data-field="applicant">Applicant</th>
                   <th data-field="Score">Score</th>
                   <th data-field="view">View</th>
-                  <th data-field="select_user">Select</th>
+                  <th data-field="select_user">Hire Applicant?</th>
                 </tr>
               </thead>
-
               <tbody id="list-applicants">
               </tbody>
             </table>
@@ -52,42 +87,66 @@ $(document).ready(function($) {
       $('.title').html(job.job_title);
       $('.company').html("Company Name: "+job.company_name);
       $('.description').html(job.description);
+      var total = 0;
+
       job.requirements.forEach(function (e) {
-        if (e.is_available === 1) {
-          if (e.is_required === 1) {
-            $('.required-keyskills').append('<div class="chip light-blue darken-2 white-text">'+e.keyword.keyword+'</div> ');
-          } else {
-            $('.keyskills').append('<div class="chip light-green darken-2 white-text">'+e.keyword.keyword+'</div> ');
+        $('#list-requirements').append('<tr id="requirement'+e.id+'"><td><input type="hidden" name="id" value="'+e.id+'"><div class="col s12"><input placeholder="Keyword" name="keyword" id="keyword" type="text" class="validate" value="'+e.keyword.keyword+'" required></div></td><td><div class="col s8"><input placeholder="Weightage" id="weightage" name="weightage" type="text" class="validate" value="'+e.weightage+'" required></div></td><td><div class="switch"><label>No<input name="is_required" type="checkbox" '+(e.is_required?"checked":"")+'><span class="lever"></span>Yes</label></div></td><td><div class="switch"><label>No<input type="checkbox" name="is_available" '+(e.is_available?"checked":"")+'><span class="lever"></span>Yes</label></div></td><td><button class="btn waves-effect waves-light save-requirements" type="submit" name="action">Save</button></td></tr>'); 
+      });
+
+      $('.save-requirements').click(function(ev) {
+        var formData = $(this).parent().parent().find(":input").serialize();
+        var url = 'api/job/<?php echo $_GET["id"]; ?>/requirements';
+        $.ajax({
+          type: "PATCH",
+          url: url,
+          data: formData, // serializes the form's elements.
+          success: function(data){
+            window.location.href ='';
+          },
+          error: function(data){
+            json = JSON.parse(data.responseText);
+            alert(json.Status);
           }
-
-        } 
-      });
-    },
-    error: function(data){
-    }
-  });
-
-  url = 'api/candidates/<?php echo $_GET["id"];?>';
-  $.ajax({
-    type: "GET",
-    url: url,
-    success: function(data){
-      candidates = data;
-      candidates.forEach(function(candidate) {
-        $('#list-applicants').append('<tr><td>'+candidate.user.name+'</td><td>'+candidate.score+'%</td><td><a target="_blank" href="api/resume/'+candidate.id+'/download">View Resume</a><br/><br/><a class="modal-trigger" href="#modal'+candidate.user_id+'">View more details</a></td><td><p><input name="group1" type="checkbox" id="selectapplicant'+candidate.user_id+'" /><label for="selectapplicant'+candidate.user_id+'"></label></p></td></tr>');
-
-        $('.modals').append('<div id="modal'+candidate.user_id+'" class="modal"><div class="modal-content"><h4>Candidate details</h4><p>Name: '+candidate.user.name+'</br>Email: '+candidate.user.email+'</br>Contact Number: '+candidate.contact+'</p><h5>Skillset: </h5><span class="skills'+candidate.user_id+'"></span></div><div class="modal-footer"><a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Close</a></div></div>');
-
-        candidate.resume_keywords.forEach(function (e) {
-          $('.skills'+candidate.user_id).append('<div class="chip light-blue darken-2 white-text">'+e.keyword.keyword+'</div> ');
         });
-
       });
-    $('.modal-trigger').leanModal();
-    },
-    error: function(data){
     }
   });
+
+$('.add-requirements').click(function(ev) {
+        var formData = $(this).parent().parent().find(":input").serialize();
+        var url = 'api/job/<?php echo $_GET["id"]; ?>/requirements';
+        $.ajax({
+          type: "POST",
+          url: url,
+          data: formData, // serializes the form's elements.
+          success: function(data){
+            window.location.href ='';
+          },
+          error: function(data){
+            json = JSON.parse(data.responseText);
+            alert(json.Status);
+          }
+        });
+      });
+
+url = 'api/applicant/<?php echo $_GET["id"];?>';
+$.ajax({
+  type: "GET",
+  url: url,
+  success: function(data){
+    applicants = data;
+    applicants.forEach(function(applicant) {
+      $('#list-applicants').append('<tr><td>'+applicant.user.name+'</td><td>'+applicant.score+'%</td><td><a target="_blank" href="api/resume/'+applicant.id+'/download">View Resume</a><br/><br/><a class="modal-trigger" href="#modal'+applicant.user_id+'">View more details</a></td><td><p><input name="group1" type="checkbox" id="selectapplicant'+applicant.user_id+'" /><label for="selectapplicant'+applicant.user_id+'"></label></p></td></tr>');
+
+      $('.modals').append('<div id="modal'+applicant.user_id+'" class="modal"><div class="modal-content"><h4>Applicant details</h4><p>Name: '+applicant.user.name+'</br>Email: '+applicant.user.email+'</br>Contact Number: '+applicant.contact+'</p><h5>Skillset: </h5><span class="skills'+applicant.user_id+'"></span></div><div class="modal-footer"><a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Close</a></div></div>');
+
+      applicant.resume_keywords.forEach(function (e) {
+        $('.skills'+applicant.user_id).append('<div class="chip light-blue darken-2 white-text">'+e.keyword.keyword+'</div> ');
+      });
+    });
+    $('.modal-trigger').leanModal();
+  }
+});
 });
 
 </script>

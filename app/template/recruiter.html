@@ -39,7 +39,7 @@ $(document).ready(function($) {
     success: function(data){
       jobs = data;
       jobs.forEach(function(job) {
-          $('#list-jobs').append('<tr><td>'+job.job_title+'</td><td>'+job.company_name+'</td><td>'+job.description.substring(0,255)+'</td><td><a href="viewPost.php?id='+job.id+'">View candidates</a></td></tr>');
+          $('#list-jobs').append('<tr><td>'+job.job_title+'</td><td>'+job.company_name+'</td><td>'+job.description.substring(0,255)+'</td><td><a href="viewPost.php?id='+job.id+'">View Applicants</a></td></tr>');
       });
     },
     error: function(data){

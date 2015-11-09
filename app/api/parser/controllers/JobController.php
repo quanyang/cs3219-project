@@ -64,7 +64,6 @@ class JobController extends Controller {
                 return;
             }
         } catch (\Exception $e) {
-            print $e;
             $app->render(500, ['Status' => 'An error occured.']);
             return;
         }
@@ -86,7 +85,6 @@ class JobController extends Controller {
                 $app->render(404, ['Status' => 'Job not found.']);
             }
         } catch (\Exception $e) {
-            print $e;
             $app->render(500, ['Status' => 'An error occured.']);
         }
 	}
@@ -137,8 +135,103 @@ class JobController extends Controller {
         }
     }
 
-	public static function addRequirementsToJob($job_id) {
+    public static function updateRequirements($job_id) {
+        $app = \Slim\Slim::getInstance();
 
+        if (!\parser\controllers\ApplicationController::isLogin()) {
+            $app->render(401, ['Status' => 'Unauthorised.' ]);
+            return;
+        }
+
+        $allPostVars = $app->request->post();
+        $id = @$allPostVars['id']?@trim(htmlspecialchars($allPostVars['id'], ENT_QUOTES, 'UTF-8')):NULL;
+        $keyword = @$allPostVars['keyword']?@trim(htmlspecialchars($allPostVars['keyword'], ENT_QUOTES, 'UTF-8')):NULL;
+        $weightage = @$allPostVars['weightage']?@trim(htmlspecialchars($allPostVars['weightage'], ENT_QUOTES, 'UTF-8')):NULL;
+        $is_required = @$allPostVars['is_required'] === "on"?true:false;
+        $is_available = @$allPostVars['is_available'] === "on"?true:false;
+
+        if ( !preg_match('/^\d+$/',$id) || !preg_match('/^\d+(.\d{1,2})?$/',$weightage) || !InputValidator::isValidStringInput($keyword,255,0)) {
+            $app->render(400, ['Status' => 'Invalid input.' ]);
+            return;
+        }
+
+        try {
+            $user = \parser\models\User::where('email','=',$_SESSION['email'])->first();
+            $job  = \parser\models\Job::where('id','=',$job_id)->whereIn('id', function($query) use ($user) { 
+                    $query->select('job_id')->from('job_recruiters')->where('user_id','=',$user->id);
+                })->first();
+
+            if ($user && $job) {
+                $keyword = \parser\models\Keyword::firstOrCreate(array('keyword' => $keyword));
+                $requirement = \parser\models\JobRequirement::where('id','=',$id)->where('job_id','=',$job->id)->first();
+                if ($requirement) {
+                    $requirement->keyword_id = $keyword->id;
+                    $requirement->weightage = $weightage;
+                    $requirement->is_required = $is_required;
+                    $requirement->is_available = $is_available;
+                    $requirement->save();
+                    echo json_encode($requirement, JSON_UNESCAPED_SLASHES);
+                } else {
+                    $app->render(401, ['Status' => 'Unauthorised.' ]);
+                    return;
+                }
+            } else {
+                $app->render(401, ['Status' => 'Unauthorised.' ]);
+                return;
+            }
+
+        } catch (\Exception $e) {
+            print $e;
+            $app->render(500, ['Status' => 'An error occurred.' ]);
+            return;
+        }
+    }
+
+	public static function addRequirementsToJob($job_id) {
+        $app = \Slim\Slim::getInstance();
+
+        if (!\parser\controllers\ApplicationController::isLogin()) {
+            $app->render(401, ['Status' => 'Unauthorised.' ]);
+            return;
+        }
+
+        $allPostVars = $app->request->post();
+        $keyword = @$allPostVars['keyword']?@trim(htmlspecialchars($allPostVars['keyword'], ENT_QUOTES, 'UTF-8')):NULL;
+        $weightage = @$allPostVars['weightage']?@trim(htmlspecialchars($allPostVars['weightage'], ENT_QUOTES, 'UTF-8')):NULL;
+        $is_required = @$allPostVars['is_required'] === "on"?true:false;
+        $is_available = @$allPostVars['is_available'] === "on"?true:false;
+
+        if ( !preg_match('/^\d+(.\d{1,2})?$/',$weightage) || !InputValidator::isValidStringInput($keyword,255,0)) {
+            $app->render(400, ['Status' => 'Invalid input.' ]);
+            return;
+        }
+
+        try {
+            $user = \parser\models\User::where('email','=',$_SESSION['email'])->first();
+            $job  = \parser\models\Job::where('id','=',$job_id)->whereIn('id', function($query) use ($user) { 
+                    $query->select('job_id')->from('job_recruiters')->where('user_id','=',$user->id);
+                })->first();
+
+            if ($user && $job) {
+                $keyword = \parser\models\Keyword::firstOrCreate(array('keyword' => $keyword));
+                $requirement = new \parser\models\JobRequirement();
+                $requirement->job_id = $job->id;
+                $requirement->keyword_id = $keyword->id;
+                $requirement->weightage = $weightage;
+                $requirement->is_required = $is_required;
+                $requirement->is_available = $is_available;
+                $requirement->save();
+                echo json_encode($requirement, JSON_UNESCAPED_SLASHES);
+            } else {
+                $app->render(401, ['Status' => 'Unauthorised.' ]);
+                return;
+            }
+
+        } catch (\Exception $e) {
+            print $e;
+            $app->render(500, ['Status' => 'An error occurred.' ]);
+            return;
+        }
 	}
 
 	public static function removeRequirementsToJob($job_id) {

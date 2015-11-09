@@ -19,7 +19,6 @@ class CreateKeywordsTable extends Migration
         });
         Schema::table('keywords', function($table) {
             $table->integer('keyword_category_id')->unsigned();
-            $table->foreign('keyword_category_id')->references('id')->on('keyword_categories')->onDelete('cascade');
         });
     }
 
