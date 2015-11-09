@@ -18,7 +18,7 @@ class Job extends \Illuminate\Database\Eloquent\Model
     protected $hidden = ['jobrequirements','jobrecruitersrelationship'];
 
     public function jobrequirements() {
-        return $this->hasMany('parser\models\JobRequirement');
+        return $this->hasMany('parser\models\JobRequirement','job_id','id');
     }
     public function jobrecruitersrelationship() {
         return $this->hasMany('parser\models\JobRecruiter','job_id','id');

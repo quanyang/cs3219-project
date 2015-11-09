@@ -23,7 +23,7 @@ class JobRequirement extends \Illuminate\Database\Eloquent\Model {
 	}
 
 	public function related_keyword() {
-		return $this->belongsTo('parser\models\Keyword','id','id');
+		return $this->belongsTo('parser\models\Keyword','keyword_id','id');
 	}
 
 	public function getKeywordAttribute() {

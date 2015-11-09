@@ -82,6 +82,12 @@ private function addDefaultRoutes() {
             }); 
         });
 
+        $app->group('/resume', function() use ($app) {
+            $app->group('/:application_id', function() use ($app) {
+                $app->get('/download', 'parser\controllers\ApplicationController::downloadResume');
+            });
+        });
+
         $app->group('/recruiter', function() use($app) {
             $app->group('/job', function() use ($app) {
                 $app->get('', 'parser\controllers\JobController::getAllRecruitmentPosts');

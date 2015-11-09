@@ -9,6 +9,75 @@ class ApplicationController extends Controller {
 	public function __construct() {
 	}
 
+    public static function downloadResume($application_id) {
+        $app = \Slim\Slim::getInstance();
+
+        if (!\parser\controllers\ApplicationController::isLogin()) {
+            $app->render(401, ['Status' => 'Unauthorised.' ]);
+            return;
+        }
+
+        try {
+            $application  = \parser\models\Application::where('id','=',$application_id)->first();
+            $user = \parser\models\User::where('email','=',$_SESSION['email'])->first();
+            if ($user && $application) {
+                $job = \parser\models\Job::where('id','=', $application->job_id)->WhereIn('id', function($query) use ($user) { 
+                    $query->select('job_id')->from('job_recruiters')->where('user_id','=',$user->id);
+                })->get();
+                if (sizeof($job) > 0){
+                    //authorized to download file
+                    $fileName = $application->resume_path;
+
+                    if (empty($fileName)) {
+                        $app->render(404, ['Status' => 'File not found.' ]);
+                        return;
+                    }
+
+                    $dir = './resume-uploads/';
+                    $fileUri = $dir . $fileName;
+                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                    $mime = finfo_file($finfo, $fileUri);
+                    $extension = end(explode(".", $fileName));
+                    finfo_close($finfo);
+                    if (file_exists($fileUri)) {
+                        $fileModTime = filemtime($fileUri);
+                        // Getting headers sent by the client.
+                        $headers = $app->request->headers;
+                        // Checking if the client is validating his cache and if it is current.
+                        if (isset($headers['If-Modified-Since']) && (strtotime($headers['If-Modified-Since']) == $fileModTime)) {
+
+                            // Client's cache IS current, so we just respond '304 Not Modified'.
+                            header('Last-Modified: '.gmdate('D, d M Y H:i:s', $fileModTime).' GMT', true, 304);
+                        } else {
+                            // Image not cached or cache outdated, we respond '200 OK' and output the image.
+                            header('Content-Disposition: inline; filename="resume-'.preg_replace('/\ /','-',$user->name).'-'.$application->contact.'.'.$extension.'"');
+                            $app->response()->header("Content-Type", $mime);
+                            header('Last-Modified: '.gmdate('D, d M Y H:i:s', $fileModTime).' GMT', true, 200);
+                            header('Content-transfer-encoding: binary');
+                            header('Content-length: '.filesize($fileUri));
+                            readfile($fileUri);
+                        }
+                    } else {
+                        $app->render(404, ['Status' => 'File not found.' ]);
+                        return;
+                    }
+
+                } else {
+                    $app->render(401, ['Status' => 'Unauthorised.' ]);
+                    return;
+                }
+                
+            } else {
+                $app->render(401, ['Status' => 'Unauthorised.' ]);
+                return;
+            }     
+        } catch (\Exception $e) {
+            print $e;
+            $app->render(500, ['Status' => 'An error occurred.' ]);
+            return;
+        }        
+    }
+
     public static function getApplicationsForJob($job_id) {
         $app = \Slim\Slim::getInstance();
 
