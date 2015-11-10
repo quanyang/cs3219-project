@@ -234,7 +234,44 @@ class JobController extends Controller {
         }
 	}
 
-	public static function removeRequirementsToJob($job_id) {
+	public static function updateSettingsForJob($job_id) {
+        $app = \Slim\Slim::getInstance();
 
-	}
+        if (!\parser\controllers\ApplicationController::isLogin()) {
+            $app->render(401, ['Status' => 'Unauthorised.' ]);
+            return;
+        }
+
+        $allPostVars = $app->request->post();
+        $minimum_score = @$allPostVars['minimum_score']?@intval($allPostVars['minimum_score']):0;
+        $is_available = @$allPostVars['is_available']?@$allPostVars['is_available']:0;
+
+        $is_available = $is_available == "on"?1:0;
+       
+        if ( !preg_match('/^\d+$/',$minimum_score) ) {
+            $app->render(400, ['Status' => 'Invalid input.' ]);
+            return;
+        }
+
+        try {
+            $user = \parser\models\User::where('email','=',$_SESSION['email'])->first();
+            $job  = \parser\models\Job::where('id','=',$job_id)->whereIn('id', function($query) use ($user) { 
+                    $query->select('job_id')->from('job_recruiters')->where('user_id','=',$user->id);
+                })->first();
+
+            if ($user && $job) {
+                $job->minimum = $minimum_score;
+                $job->is_available = $is_available;
+                $job->save();
+                echo json_encode($job, JSON_UNESCAPED_SLASHES);
+            } else {
+                $app->render(401, ['Status' => 'Unauthorised.' ]);
+                return;
+            }
+
+        } catch (\Exception $e) {
+            $app->render(500, ['Status' => 'An error occurred.' ]);
+            return;
+        }
+    }
 }
