@@ -45,7 +45,11 @@ class Application extends \Illuminate\Database\Eloquent\Model {
 			});
 		})->get()->toArray();
 
-		return (sizeof($unfulfilled_requirements) == 0));
+		if (sizeof($unfulfilled_requirements) == 0) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public function getScoreAttribute() {
