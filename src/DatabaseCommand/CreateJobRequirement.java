@@ -65,8 +65,8 @@ public class CreateJobRequirement extends CreateCommand<Boolean> {
             preparedStatement = connection.prepareStatement("INSERT INTO parser.job_requirements (job_id, keyword_id, is_required, is_available, weightage) VALUES (?, ?, ?, ?, ?);");
             preparedStatement.setInt(1, _job.getId());
             preparedStatement.setInt(2, keyWordId);
-            preparedStatement.setInt(3, (isRequired) ? 1 : 0);
-            preparedStatement.setInt(4, (isAvailable) ? 1 : 0);
+            preparedStatement.setInt(3, 1);
+            preparedStatement.setInt(4, 1);
             preparedStatement.setDouble(5, weightage);
             preparedStatement.executeUpdate();
             
