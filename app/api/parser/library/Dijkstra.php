@@ -54,7 +54,6 @@ class Dijkstra
     // iteration
     $S = new \SplStack(); // shortest path with a stack
     $u = $target;
-    print_r($dist);
     $dist = 1;
     // traverse from target to source
     while (isset($prev[$u]) && $prev[$u] && $u != $source) {
