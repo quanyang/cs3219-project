@@ -69,7 +69,7 @@ class ApplicationController extends Controller {
                 foreach ($job_applications as $application) {
 
                     $job = \parser\models\Job::where('id','=',$application['job_id'])->first()->toArray();
-                    unset($application['score']);
+                    //unset($application['score']);
                     $application['job'] = $job;
                     array_push($job_applications_buffer,$application);
                 }
