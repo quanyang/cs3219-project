@@ -56,12 +56,15 @@ class Dijkstra
     $u = $target;
     $dist = 1;
     // traverse from target to source
-    while (isset($prev[$u]) && $prev[$u]) {
+    while (isset($prev[$u]) && $prev[$u] && $u != $source) {
       $S->push($u);
       $dist *= $this->graph[$prev[$u]][$u]; // add distance to predecessor
       $u = $prev[$u];
     }
 
+    if ($u != $source) {
+      return 0;
+    }
     return $dist;
   }
 }

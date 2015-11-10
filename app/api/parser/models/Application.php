@@ -77,7 +77,7 @@ class Application extends \Illuminate\Database\Eloquent\Model {
 				}
 			}
 			if ($min != 1) {
-				//$score+= $requirement->weightage * abs($min);
+				$score+= $requirement->weightage * abs($min);
 			}
 		}
 
