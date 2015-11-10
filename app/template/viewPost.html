@@ -207,17 +207,33 @@ $.ajax({
     var hidden = 0;
     applicants.forEach(function(applicant) {
       if (applicant.score >= minimum && applicant.meet_requirements == true) {
-        $('#list-applicants-above').append('<tr><td>'+applicant.user.name+'</td><td>'+applicant.score+'%</td><td><a target="_blank" href="api/resume/'+applicant.id+'/download">View Resume</a><br/><a class="modal-trigger" href="#modal'+applicant.user_id+'">View more details</a></td><td>'+(applicant.is_parsed==1?"Processed":"Processing")+'</td><td><p><input name="action" type="checkbox" class="selectapplicant" id="'+applicant.id+'" value="1" '+(applicant.is_selected==1?"checked":"")+'/><label for="'+applicant.id+'"></label></p></td></tr>');
+        $('#list-applicants-above').append('<tr><td>'+applicant.user.name+'</td><td>'+applicant.score+'%</td><td><a target="_blank" href="api/resume/'+applicant.id+'/download">View Resume</a><br/><a class="modal-trigger" href="#modal'+applicant.user_id+'">View more details</a></td><td>'+(applicant.is_parsed==1?"Processed.":"Processing..")+'</td><td><p><input name="action" type="checkbox" class="selectapplicant" id="'+applicant.id+'" value="1" '+(applicant.is_selected==1?"checked":"")+'/><label for="'+applicant.id+'"></label></p></td></tr>');
       } else {
         hidden++;
         $('#list-applicants-below').append('<tr><td>'+applicant.user.name+'</td><td>'+applicant.score+'%</td><td><a target="_blank" href="api/resume/'+applicant.id+'/download">View Resume</a><br/><a class="modal-trigger" href="#modal'+applicant.user_id+'">View more details</a></td><td>'+(applicant.is_parsed==1?"Processed":"Processing")+'</td><td><p><input name="action" type="checkbox" class="selectapplicant" id="'+applicant.id+'" value="1" '+(applicant.is_selected==1?"checked":"")+'/><label for="'+applicant.id+'"></label></p></td></tr>');
       }
-      $('.modals').append('<div id="modal'+applicant.user_id+'" class="modal"><div class="modal-content"><h4>Applicant details</h4><p>Name: '+applicant.user.name+'</br>Email: '+applicant.user.email+'</br>Contact Number: '+applicant.contact+'</p><h5>Skillset: </h5><span class="skills'+applicant.user_id+'"></span></div><div class="modal-footer"><a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Close</a></div></div>');
+      $('.modals').append('<div id="modal'+applicant.user_id+'" class="modal"><div class="modal-content"><h4>Applicant details</h4><p>Name: '+applicant.user.name+'</br>Email: '+applicant.user.email+'</br>Contact Number: '+applicant.contact+'</p><h5>Skillset: </h5><span class="skills'+applicant.user_id+'"></span><h5>Matched Requirements: </h5><span class="matched'+applicant.user_id+'"></span><h5>Related Requirements: </h5><span class="related'+applicant.user_id+'"></span><h5>Unmatched Requirements: </h5><span class="unmatched'+applicant.user_id+'"></span></div><div class="modal-footer"><a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Close</a></div></div>');
 
       $('.skills'+applicant.user_id).html("");
       applicant.resume_keywords.forEach(function (e) {
-        $('.skills'+applicant.user_id).append('<div class="chip light-blue darken-2 white-text" style="margin-bottom:2px">'+e.keyword.keyword+'</div> ');
+        $('.skills'+applicant.user_id).append('<div class="chip light-grey darken-2 black-text" style="margin-bottom:2px">'+e.keyword.keyword+'</div> ');
       });
+
+      $('.matched'+applicant.user_id).html("");
+      applicant.matched_keywords.forEach(function (e) {
+        $('.matched'+applicant.user_id).append('<div class="chip light-blue darken-2 white-text" style="margin-bottom:2px">'+e.keyword.keyword+'</div> ');
+      });
+
+      $('.unmatched'+applicant.user_id).html("");
+      applicant.unmatched_keywords.forEach(function (e) {
+        $('.unmatched'+applicant.user_id).append('<div class="chip red darken-2 white-text" style="margin-bottom:2px">'+e.keyword.keyword+'</div> ');
+      });
+
+      $('.related'+applicant.user_id).html("");
+      applicant.related_keywords.forEach(function (e,v) {
+        $('.related'+applicant.user_id).append('<div class="chip green darken-2 white-text" style="margin-bottom:2px">'+e.From+' -> '+e.To+' by '+e.Relevance+' units</div> ');
+      });
+
 
       $('.selectapplicant').click(function(ev) {
         var formData = $(this).serialize()+"&applicant="+$(this).attr('id');

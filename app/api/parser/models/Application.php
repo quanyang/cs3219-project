@@ -15,7 +15,7 @@ class Application extends \Illuminate\Database\Eloquent\Model {
 	 * @var array
 	 */
 
-	protected $appends = ['user','keywords','score','meet_requirements'];
+	protected $appends = ['user','keywords','score','meet_requirements','matched_keywords','unmatched_keywords','related_keywords'];
 	protected $hidden = ['applicant'];
 
 	public function applicant() {
@@ -36,6 +36,65 @@ class Application extends \Illuminate\Database\Eloquent\Model {
 			array_push($keywords,$keyword->keyword->keyword);
 		}
 		return $keywords;
+	}
+
+	public function getMatchedKeywordsAttribute() {
+		$requirements = \parser\models\JobRequirement::where('is_available','=',1)->where('job_id','=',$this->job_id)->WhereIn('keyword_id', function($query) { 
+			$query->select('id')->from('keywords')->whereIn('id', function($query2) {
+				$query2->select('keyword_id')->from('application_keywords')->where('application_id','=',$this->id);
+			});
+		})->get();
+
+		return $requirements;
+	}
+
+	public function getUnmatchedKeywordsAttribute() {
+		$unfulfilled_requirements = \parser\models\JobRequirement::where('is_available','=',1)->where('job_id','=',$this->job_id)->WhereNotIn('keyword_id', function($query) { 
+			$query->select('id')->from('keywords')->whereIn('id', function($query2) {
+				$query2->select('keyword_id')->from('application_keywords')->where('application_id','=',$this->id);
+			});
+		})->get();
+
+		return $unfulfilled_requirements;
+	}
+
+	public function getRelatedKeywordsAttribute() {
+		$unfulfilled_requirements = \parser\models\JobRequirement::where('is_available','=',1)->where('job_id','=',$this->job_id)->WhereNotIn('keyword_id', function($query) { 
+			$query->select('id')->from('keywords')->whereIn('id', function($query2) {
+				$query2->select('keyword_id')->from('application_keywords')->where('application_id','=',$this->id);
+			});
+		})->get();
+
+		$skillset = [];
+
+		foreach($this->resumeKeywords as $keyword) {
+			array_push($skillset,$keyword->keyword);
+		}
+
+		$edges = \parser\models\KeywordRelevance::get();
+		$graph = new \parser\library\Graph();
+		foreach($edges as $edge) {
+			$graph->addEdge($edge->from_keyword_id,$edge->to_keyword_id,$edge->relevance);
+		}
+
+		$sssp = new \parser\library\Dijkstra($graph->output());
+
+		$results =[];
+		foreach($unfulfilled_requirements as $requirement) {
+			$min = 1;
+			$lowest = null;
+			foreach($skillset as $skill) {
+				$dist = -$sssp->shortestPath($skill->id,$requirement->keyword->id);
+				if ($dist <  $min) {
+					$min=$dist;
+					$lowest = $skill;
+				}
+			}
+			if ($min < 0) {
+				array_push($results,array( 'Relevance'=> (abs($min)*$requirement->weightage), 'To'=> $requirement->keyword->keyword, 'From'=>$lowest->keyword));
+			}
+		}
+		return $results;
 	}
 
 	public function getMeetRequirementsAttribute() {
