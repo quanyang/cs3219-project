@@ -102,8 +102,8 @@ private function addDefaultRoutes() {
 
             $app->group('/:job_id', function() use ($app) {
 
-                $app->group('/minimum', function() use ($app) {
-                    $app->post('', 'parser\controllers\JobController:updateMinimumForJob');
+                $app->group('/settings', function() use ($app) {
+                    $app->post('', 'parser\controllers\JobController:updateSettingsForJob');
                 });
 
                 $app->group('/applicant', function() use ($app) {

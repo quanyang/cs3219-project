@@ -248,7 +248,7 @@ class JobController extends Controller {
         }
 	}
 
-	public static function updateMinimumForJob($job_id) {
+	public static function updateSettingsForJob($job_id) {
 		$app = \Slim\Slim::getInstance();
 
         if (!\parser\controllers\ApplicationController::isLogin()) {
@@ -258,6 +258,9 @@ class JobController extends Controller {
 
         $allPostVars = $app->request->post();
         $minimum_score = @$allPostVars['minimum_score']?@intval($allPostVars['minimum_score']):0;
+        $is_available = @$allPostVars['is_available']?@$allPostVars['is_available']:0;
+
+        $is_available = $is_available == "on"?1:0;
        
         if ( !preg_match('/^\d+$/',$minimum_score) ) {
             $app->render(400, ['Status' => 'Invalid input.' ]);
@@ -272,6 +275,7 @@ class JobController extends Controller {
 
             if ($user && $job) {
                 $job->minimum = $minimum_score;
+                $job->is_available = $is_available;
                 $job->save();
                 echo json_encode($job, JSON_UNESCAPED_SLASHES);
             } else {

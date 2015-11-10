@@ -18,6 +18,8 @@
       <li><a href="index.php">Home</a></li>
       <?php
         if (isset($_SESSION['name'])) {
+          echo '<li><a href="recruiter.php">Recruiter</a></li>';
+          echo '<li><a href="applicant.php">Applicant</a></li>';
           echo '<li id=""><a href="login.php?logout=true">'.$_SESSION['name'].'</a></li>';
         } else {
           echo '<li id="login"><a href="login.php">Login</a></li>';
