@@ -28,7 +28,7 @@ class ApplicationController extends Controller {
 
         try {
             $user = \parser\models\User::where('email','=',$_SESSION['email'])->first();
-            $job  = \parser\models\Job::where('id','=',$job_id)->whereIn('id', function($query) use ($user) { 
+            $job  = \parser\models\Job::where('id','=',$job_id)->whereIn('id', function($query) use ($user) {
                     $query->select('job_id')->from('job_recruiters')->where('user_id','=',$user->id);
                 })->first();
             //checks for permission to modify job
@@ -81,7 +81,7 @@ class ApplicationController extends Controller {
                 }
             } else {
                 throw new \Exception('User not found!');
-            }     
+            }
 
         } catch (\Exception $e) {
             $app->render(500, ['Status' => 'An error occurred.' ]);
@@ -101,7 +101,7 @@ class ApplicationController extends Controller {
             $application  = \parser\models\Application::where('id','=',$application_id)->first();
             $user = \parser\models\User::where('email','=',$_SESSION['email'])->first();
             if ($user && $application) {
-                $job = \parser\models\Job::where('id','=', $application->job_id)->WhereIn('id', function($query) use ($user) { 
+                $job = \parser\models\Job::where('id','=', $application->job_id)->WhereIn('id', function($query) use ($user) {
                     $query->select('job_id')->from('job_recruiters')->where('user_id','=',$user->id);
                 })->get();
                 if (sizeof($job) > 0){
@@ -141,15 +141,15 @@ class ApplicationController extends Controller {
                     $app->render(401, ['Status' => 'Unauthorised.' ]);
                     return;
                 }
-                
+
             } else {
                 $app->render(401, ['Status' => 'Unauthorised.' ]);
                 return;
-            }     
+            }
         } catch (\Exception $e) {
             $app->render(500, ['Status' => 'An error occurred.' ]);
             return;
-        }        
+        }
     }
 
     public static function getApplicationsForJob($job_id) {
@@ -177,8 +177,8 @@ class ApplicationController extends Controller {
             } else {
                 $app->render(401, ['Status' => 'Unauthorised.' ]);
                 return;
-            }     
-        } catch (\Exception $e) { 
+            }
+        } catch (\Exception $e) {
             $app->render(500, ['Status' => 'An error occurred.' ]);
             return;
         }
@@ -206,7 +206,7 @@ class ApplicationController extends Controller {
                 }
             } else {
                 throw new \Exception('User or Job not found!');
-            }     
+            }
 
         } catch (\Exception $e) {
             $app->render(500, ['Status' => 'An error occurred.' ]);
@@ -264,12 +264,12 @@ class ApplicationController extends Controller {
                 $job_application->resume_path = $resume_path;
                 $job_application->save();
                 //echo json_encode($job_application, JSON_UNESCAPED_SLASHES);
+				shell_exec("java - jar parser.jar '$resume_path' '$user->id' '$job->id' '$job_id'");
+
+                echo json_encode($job_application, JSON_UNESCAPED_SLASHES);
             } else {
-                exec("java",$output);
-                print_r($output);
-                echo passthru("java -jar ../../parser.jar ./resume-uploads/$resume_path $user->id $job->id $job_application->id");
-                //throw new \Exception('Error!');
-            }     
+                throw new \Exception('Error!');
+            }
 
         } catch (\Exception $e) {
             $app->render(500, ['Status' => 'An error occurred.' ]);
