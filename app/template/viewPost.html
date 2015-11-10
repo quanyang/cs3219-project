@@ -201,7 +201,7 @@ $.ajax({
     $('.applicant-cell').html("Applicant ("+applicants.length+")");
     var hidden = 0;
     applicants.forEach(function(applicant) {
-      if (applicant.score >= minimum) {
+      if (applicant.score >= minimum || applicant.meet_requirements == true) {
         $('#list-applicants-above').append('<tr><td>'+applicant.user.name+'</td><td>'+applicant.score+'%</td><td><a target="_blank" href="api/resume/'+applicant.id+'/download">View Resume</a><br/><a class="modal-trigger" href="#modal'+applicant.user_id+'">View more details</a></td><td><p><input name="action" type="checkbox" class="selectapplicant" id="'+applicant.id+'" value="1" '+(applicant.is_selected==1?"checked":"")+'/><label for="'+applicant.id+'"></label></p></td></tr>');
       } else {
         hidden++;
