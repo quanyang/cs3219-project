@@ -64,7 +64,7 @@ $(document).ready(function($) {
 
         htmlCode += '<br/>Key skill(s): ';
         job.requirements.forEach(function (e) {
-          if (e.is_required === 1 && e.is_available === 1) {
+          if (e.is_required == 1 && e.is_available == 1) {
             htmlCode+='<div class="chip light-blue darken-2 white-text">'+e.keyword.keyword+'</div> ';
           }
         });
