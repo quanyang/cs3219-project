@@ -43,11 +43,9 @@ class Application extends \Illuminate\Database\Eloquent\Model {
 			$query->select('id')->from('keywords')->whereIn('id', function($query2) {
 				$query2->select('keyword_id')->from('application_keywords')->where('application_id','=',$this->id);
 			});
-		})->get();
+		})->get()->toArray();
 
-		return $unfulfilled_requirements;
-
-		//return (sizeof($unfulfilled_requirements) == 0));
+		return (sizeof($unfulfilled_requirements) == 0));
 	}
 
 	public function getScoreAttribute() {
