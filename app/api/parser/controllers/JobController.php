@@ -122,8 +122,6 @@ class JobController extends Controller {
             $job->is_available = 1;
             $job->save();
 
-            echo passthru("java -jar ../../parser.jar '".$description."' '".$job->id."'");
-
             $user = \parser\models\User::where('email','=',$_SESSION['email'])->first();
 
             $jobrecruiter = new \parser\models\JobRecruiter();
@@ -131,7 +129,7 @@ class JobController extends Controller {
             $jobrecruiter->user_id = $user->id;
             $jobrecruiter->save();
 
-						shell_exec("java - jar parser.jar '$description' ' $job->id'");
+			shell_exec("java - jar parser.jar '$description' ' $job->id'");
 
             echo json_encode($job, JSON_UNESCAPED_SLASHES);
         } catch (\Exception $e) {
