@@ -163,6 +163,14 @@ class JobController extends Controller {
 
             if ($user && $job) {
                 $keyword = \parser\models\Keyword::firstOrCreate(array('keyword' => $keyword));
+
+                $exists_requirement = \parser\models\JobRequirement::where('job_id','=',$job->id)->where('keyword_id','=',$keyword->id)->first();
+
+                if ($exists_requirement && $exists_requirement->id != $id) {
+                    $app->render(401, ['Status' => 'Duplicate requirement.' ]);
+                    return;
+                }
+
                 $requirement = \parser\models\JobRequirement::where('id','=',$id)->where('job_id','=',$job->id)->first();
                 if ($requirement) {
                     $requirement->keyword_id = $keyword->id;
@@ -196,7 +204,7 @@ class JobController extends Controller {
 
         $allPostVars = $app->request->post();
         $keyword = @$allPostVars['keyword']?@trim(htmlspecialchars($allPostVars['keyword'], ENT_QUOTES, 'UTF-8')):NULL;
-        $weightage = @$allPostVars['weightage']?@trim(htmlspecialchars($allPostVars['weightage'], ENT_QUOTES, 'UTF-8')):NULL;
+        $weightage = isset($allPostVars['weightage'])?@intval($allPostVars['weightage']):NULL;
         $is_required = @$allPostVars['is_required'] === "on"?true:false;
         $is_available = @$allPostVars['is_available'] === "on"?true:false;
 
@@ -213,6 +221,14 @@ class JobController extends Controller {
 
             if ($user && $job) {
                 $keyword = \parser\models\Keyword::firstOrCreate(array('keyword' => $keyword));
+
+                $exists_requirement = \parser\models\JobRequirement::where('job_id','=',$job->id)->where('keyword_id','=',$keyword->id)->first();
+
+                if ($exists_requirement) {
+                    $app->render(401, ['Status' => 'Duplicate requirement.' ]);
+                    return;
+                }
+                
                 $requirement = new \parser\models\JobRequirement();
                 $requirement->job_id = $job->id;
                 $requirement->keyword_id = $keyword->id;

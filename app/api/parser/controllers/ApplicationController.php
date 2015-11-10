@@ -179,6 +179,7 @@ class ApplicationController extends Controller {
                 return;
             }     
         } catch (\Exception $e) { 
+            print $e;
             $app->render(500, ['Status' => 'An error occurred.' ]);
             return;
         }

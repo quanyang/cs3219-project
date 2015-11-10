@@ -41,11 +41,45 @@ class Application extends \Illuminate\Database\Eloquent\Model {
 	public function getScoreAttribute() {
 
 		$totalScore = \parser\models\JobRequirement::where('job_id','=',$this->job_id)->where('is_available','=',1)->sum('weightage');
+
 		$score = \parser\models\JobRequirement::where('is_available','=',1)->where('job_id','=',$this->job_id)->WhereIn('keyword_id', function($query) { 
 			$query->select('id')->from('keywords')->whereIn('id', function($query2) {
 				$query2->select('keyword_id')->from('application_keywords')->where('application_id','=',$this->id);
 			});
 		})->sum('weightage');
+
+		$unfulfilled_requirements = \parser\models\JobRequirement::where('is_available','=',1)->where('job_id','=',$this->job_id)->WhereNotIn('keyword_id', function($query) { 
+			$query->select('id')->from('keywords')->whereIn('id', function($query2) {
+				$query2->select('keyword_id')->from('application_keywords')->where('application_id','=',$this->id);
+			});
+		})->get();
+
+		$skillset = [];
+
+		foreach($this->resumeKeywords as $keyword) {
+			array_push($skillset,$keyword->keyword->id);
+		}
+
+		$edges = \parser\models\KeywordRelevance::get();
+		$graph = new \parser\library\Graph();
+		foreach($edges as $edge) {
+			$graph->addEdge($edge->from_keyword_id,$edge->to_keyword_id,$edge->relevance);
+		}
+
+		$sssp = new \parser\library\Dijkstra($graph->output());
+
+		foreach($unfulfilled_requirements as $requirement) {
+			$min = 1;
+			foreach($skillset as $skill) {
+				$dist = -$sssp->shortestPath($skill,$requirement->keyword->id);
+				if ($dist<$min) {
+					$min = $dist;
+				}
+			}
+
+			$score+= $requirement->weightage * abs($min);
+		}
+
 		if ($totalScore <= 0) {
 			return 0;
 		}

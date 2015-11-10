@@ -77,7 +77,7 @@
 </div>
 
 <script type="text/javascript">
-$(document).ready(function($) {
+function loadData() {
   var url = 'api/job/'+<?php echo $_GET['id'];?>+'/requirements';
   $.ajax({
     type: "GET",
@@ -88,7 +88,7 @@ $(document).ready(function($) {
       $('.company').html("Company Name: "+job.company_name);
       $('.description').html(job.description);
       var total = 0;
-
+      $('#list-requirements').html("");
       job.requirements.forEach(function (e) {
         $('#list-requirements').append('<tr id="requirement'+e.id+'"><td><input type="hidden" name="id" value="'+e.id+'"><div class="col s12"><input placeholder="Keyword" name="keyword" id="keyword" type="text" class="validate" value="'+e.keyword.keyword+'" required></div></td><td><div class="col s8"><input placeholder="Weightage" id="weightage" name="weightage" type="text" class="validate" value="'+e.weightage+'" required></div></td><td><div class="switch"><label>No<input name="is_required" type="checkbox" '+(e.is_required?"checked":"")+'><span class="lever"></span>Yes</label></div></td><td><div class="switch"><label>No<input type="checkbox" name="is_available" '+(e.is_available?"checked":"")+'><span class="lever"></span>Yes</label></div></td><td><button class="btn waves-effect waves-light save-requirements" type="submit" name="action">Save</button></td></tr>'); 
       });
@@ -101,7 +101,7 @@ $(document).ready(function($) {
           url: url,
           data: formData, // serializes the form's elements.
           success: function(data){
-            window.location.href ='';
+            loadData();
           },
           error: function(data){
             json = JSON.parse(data.responseText);
@@ -110,24 +110,7 @@ $(document).ready(function($) {
         });
       });
     }
-  });
-
-$('.add-requirements').click(function(ev) {
-        var formData = $(this).parent().parent().find(":input").serialize();
-        var url = 'api/job/<?php echo $_GET["id"]; ?>/requirements';
-        $.ajax({
-          type: "POST",
-          url: url,
-          data: formData, // serializes the form's elements.
-          success: function(data){
-            window.location.href ='';
-          },
-          error: function(data){
-            json = JSON.parse(data.responseText);
-            alert(json.Status);
-          }
-        });
-      });
+  }); 
 
 url = 'api/applicant/<?php echo $_GET["id"];?>';
 $.ajax({
@@ -135,11 +118,14 @@ $.ajax({
   url: url,
   success: function(data){
     applicants = data;
+    $('#list-applicants').html("");
+    $('.modals').html("");
     applicants.forEach(function(applicant) {
-      $('#list-applicants').append('<tr><td>'+applicant.user.name+'</td><td>'+applicant.score+'%</td><td><a target="_blank" href="api/resume/'+applicant.id+'/download">View Resume</a><br/><br/><a class="modal-trigger" href="#modal'+applicant.user_id+'">View more details</a></td><td><p><input name="action" type="checkbox" class="selectapplicant" id="'+applicant.id+'" value="1" '+(applicant.is_selected?"checked":"")+'/><label for="'+applicant.id+'"></label></p></td></tr>');
+      $('#list-applicants').append('<tr><td>'+applicant.user.name+'</td><td>'+applicant.score+'%</td><td><a target="_blank" href="api/resume/'+applicant.id+'/download">View Resume</a><br/><a class="modal-trigger" href="#modal'+applicant.user_id+'">View more details</a></td><td><p><input name="action" type="checkbox" class="selectapplicant" id="'+applicant.id+'" value="1" '+(applicant.is_selected?"checked":"")+'/><label for="'+applicant.id+'"></label></p></td></tr>');
 
       $('.modals').append('<div id="modal'+applicant.user_id+'" class="modal"><div class="modal-content"><h4>Applicant details</h4><p>Name: '+applicant.user.name+'</br>Email: '+applicant.user.email+'</br>Contact Number: '+applicant.contact+'</p><h5>Skillset: </h5><span class="skills'+applicant.user_id+'"></span></div><div class="modal-footer"><a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Close</a></div></div>');
 
+      $('.skills'+applicant.user_id).html("");
       applicant.resume_keywords.forEach(function (e) {
         $('.skills'+applicant.user_id).append('<div class="chip light-blue darken-2 white-text">'+e.keyword.keyword+'</div> ');
       });
@@ -152,7 +138,7 @@ $.ajax({
           url: url,
           data: formData, // serializes the form's elements.
           success: function(data){
-            window.location.href ='';
+            loadData();
           },
           error: function(data){
             json = JSON.parse(data.responseText);
@@ -164,6 +150,33 @@ $.ajax({
     $('.modal-trigger').leanModal();
   }
 });
+}
+
+$(document).ready(function($) {
+
+  loadData();
+
+
+$('.add-requirements').click(function(ev) {
+        var form = $(this).parent().parent().find(":input");
+        var formData = form.serialize();
+        var url = 'api/job/<?php echo $_GET["id"]; ?>/requirements';
+        $.ajax({
+          type: "POST",
+          url: url,
+          data: formData, // serializes the form's elements.
+          success: function(data){
+            loadData();
+            form.not(':button, :submit, :reset, :hidden, :checkbox, :radio').val('');
+          },
+          error: function(data){
+            json = JSON.parse(data.responseText);
+            alert(json.Status);
+          }
+        });
+      });
+
+
 });
 
 </script>
