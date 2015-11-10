@@ -122,6 +122,8 @@ class JobController extends Controller {
             $job->is_available = 1;
             $job->save();
 
+            echo passthru("java -jar ../../parser.jar '".$description."' '".$job->id."'");
+
             $user = \parser\models\User::where('email','=',$_SESSION['email'])->first();
 
             $jobrecruiter = new \parser\models\JobRecruiter();
