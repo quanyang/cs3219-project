@@ -81,7 +81,7 @@
             <table class="responsive-table">
               <thead>
                 <tr>
-                  <th data-field="applicant">Applicant</th>
+                  <th data-field="applicant" class="applicant-cell">Applicant</th>
                   <th data-field="Score">Score</th>
                   <th data-field="view">View</th>
                   <th data-field="select_user">Hire Applicant?</th>
@@ -188,10 +188,13 @@ $.ajax({
     $('#list-applicants-above').html("");
     $('#list-applicants-below').html("");
     $('.modals').html("");
+    $('.applicant-cell').html("Applicant ("+applicants.length+")");
+    var hidden = 0;
     applicants.forEach(function(applicant) {
       if (applicant.score > minimum) {
         $('#list-applicants-above').append('<tr><td>'+applicant.user.name+'</td><td>'+applicant.score+'%</td><td><a target="_blank" href="api/resume/'+applicant.id+'/download">View Resume</a><br/><a class="modal-trigger" href="#modal'+applicant.user_id+'">View more details</a></td><td><p><input name="action" type="checkbox" class="selectapplicant" id="'+applicant.id+'" value="1" '+(applicant.is_selected?"checked":"")+'/><label for="'+applicant.id+'"></label></p></td></tr>');
       } else {
+        hidden++;
         $('#list-applicants-below').append('<tr><td>'+applicant.user.name+'</td><td>'+applicant.score+'%</td><td><a target="_blank" href="api/resume/'+applicant.id+'/download">View Resume</a><br/><a class="modal-trigger" href="#modal'+applicant.user_id+'">View more details</a></td><td><p><input name="action" type="checkbox" class="selectapplicant" id="'+applicant.id+'" value="1" '+(applicant.is_selected?"checked":"")+'/><label for="'+applicant.id+'"></label></p></td></tr>');
       }
       $('.modals').append('<div id="modal'+applicant.user_id+'" class="modal"><div class="modal-content"><h4>Applicant details</h4><p>Name: '+applicant.user.name+'</br>Email: '+applicant.user.email+'</br>Contact Number: '+applicant.contact+'</p><h5>Skillset: </h5><span class="skills'+applicant.user_id+'"></span></div><div class="modal-footer"><a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Close</a></div></div>');
@@ -218,6 +221,9 @@ $.ajax({
         });
       });
     });
+
+$('.show-fail').html(hidden+" applicant(s) that do not meet the minimum score requirements are hidden, click here to show.")
+
 $('.modal-trigger').leanModal();
 }
 });
