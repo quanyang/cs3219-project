@@ -91,6 +91,7 @@
                   <th data-field="applicant" class="applicant-cell">Applicant</th>
                   <th data-field="Score">Score</th>
                   <th data-field="view">View</th>
+                  <th data-field="is_processed">Is processed?</th>
                   <th data-field="select_user">Hire Applicant?</th>
                 </tr>
               </thead>
@@ -206,10 +207,10 @@ $.ajax({
     var hidden = 0;
     applicants.forEach(function(applicant) {
       if (applicant.score >= minimum && applicant.meet_requirements == true) {
-        $('#list-applicants-above').append('<tr><td>'+applicant.user.name+'</td><td>'+applicant.score+'%</td><td><a target="_blank" href="api/resume/'+applicant.id+'/download">View Resume</a><br/><a class="modal-trigger" href="#modal'+applicant.user_id+'">View more details</a></td><td><p><input name="action" type="checkbox" class="selectapplicant" id="'+applicant.id+'" value="1" '+(applicant.is_selected==1?"checked":"")+'/><label for="'+applicant.id+'"></label></p></td></tr>');
+        $('#list-applicants-above').append('<tr><td>'+applicant.user.name+'</td><td>'+applicant.score+'%</td><td><a target="_blank" href="api/resume/'+applicant.id+'/download">View Resume</a><br/><a class="modal-trigger" href="#modal'+applicant.user_id+'">View more details</a></td><td>'+(applicant.is_parsed==1?"Processed":"Processing")+'</td><td><p><input name="action" type="checkbox" class="selectapplicant" id="'+applicant.id+'" value="1" '+(applicant.is_selected==1?"checked":"")+'/><label for="'+applicant.id+'"></label></p></td></tr>');
       } else {
         hidden++;
-        $('#list-applicants-below').append('<tr><td>'+applicant.user.name+'</td><td>'+applicant.score+'%</td><td><a target="_blank" href="api/resume/'+applicant.id+'/download">View Resume</a><br/><a class="modal-trigger" href="#modal'+applicant.user_id+'">View more details</a></td><td><p><input name="action" type="checkbox" class="selectapplicant" id="'+applicant.id+'" value="1" '+(applicant.is_selected==1?"checked":"")+'/><label for="'+applicant.id+'"></label></p></td></tr>');
+        $('#list-applicants-below').append('<tr><td>'+applicant.user.name+'</td><td>'+applicant.score+'%</td><td><a target="_blank" href="api/resume/'+applicant.id+'/download">View Resume</a><br/><a class="modal-trigger" href="#modal'+applicant.user_id+'">View more details</a></td><td>'+(applicant.is_parsed==1?"Processed":"Processing")+'</td><td><p><input name="action" type="checkbox" class="selectapplicant" id="'+applicant.id+'" value="1" '+(applicant.is_selected==1?"checked":"")+'/><label for="'+applicant.id+'"></label></p></td></tr>');
       }
       $('.modals').append('<div id="modal'+applicant.user_id+'" class="modal"><div class="modal-content"><h4>Applicant details</h4><p>Name: '+applicant.user.name+'</br>Email: '+applicant.user.email+'</br>Contact Number: '+applicant.contact+'</p><h5>Skillset: </h5><span class="skills'+applicant.user_id+'"></span></div><div class="modal-footer"><a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Close</a></div></div>');
 
