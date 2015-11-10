@@ -85,6 +85,7 @@ class Application extends \Illuminate\Database\Eloquent\Model {
 		foreach($unfulfilled_requirements as $requirement) {
 			$min = 1;
 			foreach($skillset as $skill) {
+				print $skill." to ".$requirement->keyword->id."\n<br/>";
 				$dist = -$sssp->shortestPath($skill,$requirement->keyword->id);
 				if ($dist<$min) {
 					$min = $dist;
