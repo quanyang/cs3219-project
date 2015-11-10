@@ -41,7 +41,7 @@ $(document).ready(function($) {
       var element = $('#applied-jobs');
       applications.forEach(function(application) {
         job = application.job;
-        var htmlCode = '<div class="card grey lighten-5"><div class="card-content black-text"><span class="black-text">'+job.job_title+' @ '+ job.company_name +'<br/>Status: '+(application.isSelected?"Selected":"Pending")+'<br/><a href="?job_id='+job.id+'">View job</a></span>';
+        var htmlCode = '<div class="card grey lighten-5"><div class="card-content black-text"><span class="black-text">'+job.job_title+' @ '+ job.company_name +'<br/>Status: '+(application.is_selected?"Selected":"Pending")+'<br/><a href="?job_id='+job.id+'">View job</a></span>';
         htmlCode += '</div>';
 
         insertText(element,htmlCode);
