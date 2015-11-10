@@ -28,6 +28,7 @@ public class CreateJobApplication  extends CreateCommand{
         try{
             config();
             insertData();
+            
             return true;
             
         } catch (Exception e){
@@ -66,6 +67,7 @@ public class CreateJobApplication  extends CreateCommand{
         try {
             connection = DriverManager.getConnection(databaseURL, user, password);
             if (application.getEmail()!= ""){
+                System.out.println("no email, updating application");
                 preparedStatement = connection.prepareStatement("UPDATE parser.applications SET user_id = ?, contact = ?, job_id = ?, email = ? ,name = ?, is_parsed = ? WHERE id = ?;");
                 preparedStatement.setInt(1, application.getUserId());
                 preparedStatement.setString(2, application.getContact());
@@ -76,6 +78,9 @@ public class CreateJobApplication  extends CreateCommand{
                 preparedStatement.setInt(7, application.getId());
             }
             else{
+                System.out.println("gt email, updating application");
+                System.out.println(application.getName());
+
                 preparedStatement = connection.prepareStatement("UPDATE parser.applications SET user_id = ?, contact = ?, job_id = ?, name = ?, is_parsed = ? WHERE id = ?;");
                 preparedStatement.setInt(1, application.getUserId());
                 preparedStatement.setString(2, application.getContact());

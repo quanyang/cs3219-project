@@ -68,12 +68,24 @@ public class ApplicationParser implements IParser<JobApplication>{
 //	    System.out.println("Extracted keywords");
 	    
 	    for(String k : keywords){
-	    	int kw = KeywordDictionary.getInstance().newKeyword(k);
-			if (kw != -1) {
-				applicationBuilder.addKeywordFound(new Pair<String, Integer>(k, kw));
-			}else{
-				System.out.println("Something wrong when calling newKeyword");
-			}
+	        String temp = k;
+            System.out.println(temp.substring(0,4));
+
+            if(k == "" || k == " "){
+                System.out.println("gg");
+
+            }
+            else if(k.substring(0, 4)== "Page" && k.length()== 5){
+	            System.out.println("Page");
+	        }
+	        else{
+    	    	int kw = KeywordDictionary.getInstance().newKeyword(k);
+    			if (kw != -1) {
+    				applicationBuilder.addKeywordFound(new Pair<String, Integer>(k, kw));
+    			}else{
+    				System.out.println("Something wrong when calling newKeyword");
+    			}
+	        }
 	        
 	    }
 //	       System.out.println("added all keywords into builder");

@@ -93,7 +93,7 @@ public class LinkedInCVParser implements IParser<JobApplication> {
 		}
 		ApplicationBuilder ab = new ApplicationBuilder(name, email, contact, userId, jobId ,applicationId);
 		for (String keyword : keywords) {
-			if (keyword != "" || keyword!= null) {
+			if (keyword != "" || keyword!= null || keyword != " ") {
 				int kw = KeywordDictionary.getInstance().newKeyword(keyword);
 				if (kw != -1) {
 					ab.addKeywordFound(new Pair<String, Integer>(keyword, kw));

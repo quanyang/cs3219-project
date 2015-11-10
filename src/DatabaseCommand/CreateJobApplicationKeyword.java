@@ -24,6 +24,7 @@ public class CreateJobApplicationKeyword extends CreateCommand {
         try{
             config();
             insertData();
+            System.out.println("storing application keyword");
             return true;
             
         } catch (Exception e){

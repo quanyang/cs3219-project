@@ -13,6 +13,7 @@ public class main {
             if(args.length == 4){
                ApplicationProcessor applicationProcessor = new ApplicationProcessor(Integer.parseInt(args[1]), Integer.parseInt(args[2]),Integer.parseInt(args[3]), args[0]);
               if(applicationProcessor.run() == true){
+                  System.out.println("saving");
                   applicationProcessor.save();
               };
             }
