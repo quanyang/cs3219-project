@@ -45,6 +45,8 @@ class Application extends \Illuminate\Database\Eloquent\Model {
 			});
 		})->get();
 
+		return $unfulfilled_requirements;
+
 		//return (sizeof($unfulfilled_requirements) == 0));
 	}
 
