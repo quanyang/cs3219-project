@@ -380,7 +380,6 @@ Icon.png
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.ear
 

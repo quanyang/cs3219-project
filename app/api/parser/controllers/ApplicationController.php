@@ -263,9 +263,7 @@ class ApplicationController extends Controller {
                 $job_application->contact = $telephone;
                 $job_application->resume_path = $resume_path;
                 $job_application->save();
-                //echo json_encode($job_application, JSON_UNESCAPED_SLASHES);
-				shell_exec("java - jar parser.jar '$resume_path' '$user->id' '$job->id' '$job_id'");
-
+				passthru("/usr/bin/java -jar ../../parser.jar './resume-uploads/$resume_path' '$user->id' '$job->id' '$job_id'");
                 echo json_encode($job_application, JSON_UNESCAPED_SLASHES);
             } else {
                 throw new \Exception('Error!');
