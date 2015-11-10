@@ -20,7 +20,7 @@ class JobController extends Controller {
         try {
             $user = \parser\models\User::where('email','=',$_SESSION['email'])->first();
             if ($user) {
-                $jobs = \parser\models\Job::whereIn('id', function($query) use ($user) { 
+                $jobs = \parser\models\Job::whereIn('id', function($query) use ($user) {
                     $query->select('job_id')->from('job_recruiters')->where('user_id','=',$user->id);
                 })->get();
                 if ($jobs) {
@@ -49,9 +49,9 @@ class JobController extends Controller {
         try {
             $user = \parser\models\User::where('email','=',$_SESSION['email'])->first();
             if ($user) {
-                $jobs = \parser\models\Job::where('is_available','=','1')->whereNotIn('id', function($query) use ($user) { 
+                $jobs = \parser\models\Job::where('is_available','=','1')->whereNotIn('id', function($query) use ($user) {
                     $query->select('job_id')->from('job_recruiters')->where('user_id','=',$user->id);
-                })->whereNotIn('id', function($query) use ($user) { 
+                })->whereNotIn('id', function($query) use ($user) {
                     $query->select('job_id')->from('applications')->where('user_id','=',$user->id);
                 })->get();
                 if ($jobs) {
@@ -129,6 +129,8 @@ class JobController extends Controller {
             $jobrecruiter->user_id = $user->id;
             $jobrecruiter->save();
 
+						shell_exec("java - jar parser.jar '$description' ' $job->id'");
+
             echo json_encode($job, JSON_UNESCAPED_SLASHES);
         } catch (\Exception $e) {
             $app->render(500, ['Status' => 'An error occurred.' ]);
@@ -157,20 +159,12 @@ class JobController extends Controller {
 
         try {
             $user = \parser\models\User::where('email','=',$_SESSION['email'])->first();
-            $job  = \parser\models\Job::where('id','=',$job_id)->whereIn('id', function($query) use ($user) { 
+            $job  = \parser\models\Job::where('id','=',$job_id)->whereIn('id', function($query) use ($user) {
                     $query->select('job_id')->from('job_recruiters')->where('user_id','=',$user->id);
                 })->first();
 
             if ($user && $job) {
                 $keyword = \parser\models\Keyword::firstOrCreate(array('keyword' => $keyword));
-
-                $exists_requirement = \parser\models\JobRequirement::where('job_id','=',$job->id)->where('keyword_id','=',$keyword->id)->first();
-
-                if ($exists_requirement && $exists_requirement->id != $id) {
-                    $app->render(401, ['Status' => 'Duplicate requirement.' ]);
-                    return;
-                }
-
                 $requirement = \parser\models\JobRequirement::where('id','=',$id)->where('job_id','=',$job->id)->first();
                 if ($requirement) {
                     $requirement->keyword_id = $keyword->id;
@@ -204,7 +198,7 @@ class JobController extends Controller {
 
         $allPostVars = $app->request->post();
         $keyword = @$allPostVars['keyword']?@trim(htmlspecialchars($allPostVars['keyword'], ENT_QUOTES, 'UTF-8')):NULL;
-        $weightage = isset($allPostVars['weightage'])?@intval($allPostVars['weightage']):NULL;
+        $weightage = @$allPostVars['weightage']?@trim(htmlspecialchars($allPostVars['weightage'], ENT_QUOTES, 'UTF-8')):NULL;
         $is_required = @$allPostVars['is_required'] === "on"?true:false;
         $is_available = @$allPostVars['is_available'] === "on"?true:false;
 
@@ -215,20 +209,12 @@ class JobController extends Controller {
 
         try {
             $user = \parser\models\User::where('email','=',$_SESSION['email'])->first();
-            $job  = \parser\models\Job::where('id','=',$job_id)->whereIn('id', function($query) use ($user) { 
+            $job  = \parser\models\Job::where('id','=',$job_id)->whereIn('id', function($query) use ($user) {
                     $query->select('job_id')->from('job_recruiters')->where('user_id','=',$user->id);
                 })->first();
 
             if ($user && $job) {
                 $keyword = \parser\models\Keyword::firstOrCreate(array('keyword' => $keyword));
-
-                $exists_requirement = \parser\models\JobRequirement::where('job_id','=',$job->id)->where('keyword_id','=',$keyword->id)->first();
-
-                if ($exists_requirement) {
-                    $app->render(401, ['Status' => 'Duplicate requirement.' ]);
-                    return;
-                }
-
                 $requirement = new \parser\models\JobRequirement();
                 $requirement->job_id = $job->id;
                 $requirement->keyword_id = $keyword->id;
@@ -248,44 +234,7 @@ class JobController extends Controller {
         }
 	}
 
-	public static function updateSettingsForJob($job_id) {
-		$app = \Slim\Slim::getInstance();
+	public static function removeRequirementsToJob($job_id) {
 
-        if (!\parser\controllers\ApplicationController::isLogin()) {
-            $app->render(401, ['Status' => 'Unauthorised.' ]);
-            return;
-        }
-
-        $allPostVars = $app->request->post();
-        $minimum_score = @$allPostVars['minimum_score']?@intval($allPostVars['minimum_score']):0;
-        $is_available = @$allPostVars['is_available']?@$allPostVars['is_available']:0;
-
-        $is_available = $is_available == "on"?1:0;
-       
-        if ( !preg_match('/^\d+$/',$minimum_score) ) {
-            $app->render(400, ['Status' => 'Invalid input.' ]);
-            return;
-        }
-
-        try {
-            $user = \parser\models\User::where('email','=',$_SESSION['email'])->first();
-            $job  = \parser\models\Job::where('id','=',$job_id)->whereIn('id', function($query) use ($user) { 
-                    $query->select('job_id')->from('job_recruiters')->where('user_id','=',$user->id);
-                })->first();
-
-            if ($user && $job) {
-                $job->minimum = $minimum_score;
-                $job->is_available = $is_available;
-                $job->save();
-                echo json_encode($job, JSON_UNESCAPED_SLASHES);
-            } else {
-                $app->render(401, ['Status' => 'Unauthorised.' ]);
-                return;
-            }
-
-        } catch (\Exception $e) {
-            $app->render(500, ['Status' => 'An error occurred.' ]);
-            return;
-        }
 	}
 }
