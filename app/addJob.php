@@ -33,7 +33,7 @@ $(document).ready(function() {
           document.getElementById("add_job").reset();
           // Should redirect to job page
           $('#add_job .status').html("Job added!");
-          //window.location.href = "viewPost.php?id="+data.id;
+          window.location.href = "viewPost.php?id="+data.id;
         },
         error: function(data){
           $('#add_job .error').html(data.responseJSON.Status);
