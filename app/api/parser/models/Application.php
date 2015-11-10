@@ -15,7 +15,7 @@ class Application extends \Illuminate\Database\Eloquent\Model {
 	 * @var array
 	 */
 
-	protected $appends = ['user','keywords','score'];
+	protected $appends = ['user','keywords','score','meet_requirements'];
 	protected $hidden = ['applicant'];
 
 	public function applicant() {
@@ -36,6 +36,16 @@ class Application extends \Illuminate\Database\Eloquent\Model {
 			array_push($keywords,$keyword->keyword->keyword);
 		}
 		return $keywords;
+	}
+
+	public function getMeetRequirementsAttribute() {
+		$unfulfilled_requirements = \parser\models\JobRequirement::where('is_available','=',1)->where('is_required','=',1)->where('job_id','=',$this->job_id)->WhereNotIn('keyword_id', function($query) { 
+			$query->select('id')->from('keywords')->whereIn('id', function($query2) {
+				$query2->select('keyword_id')->from('application_keywords')->where('application_id','=',$this->id);
+			});
+		})->get();
+
+		return (sizeof($unfulfilled_requirements) == 0));
 	}
 
 	public function getScoreAttribute() {

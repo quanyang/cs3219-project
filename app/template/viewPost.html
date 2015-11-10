@@ -115,6 +115,7 @@
 
 <script type="text/javascript">
 var minimum = 0;
+var requirements = [];
 function loadData() {
   var show = false;
   $('#list-applicants-below').hide();
@@ -134,6 +135,7 @@ function loadData() {
     url: url,
     success: function(data){
       job = data;
+      requirements = data.requirements;
       $('.title').html(job.job_title);
       $('.company').html("Company Name: "+job.company_name);
       $('.description').html(job.description);
