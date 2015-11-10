@@ -148,7 +148,7 @@ class JobController extends Controller {
         $allPostVars = $app->request->post();
         $id = @$allPostVars['id']?@trim(htmlspecialchars($allPostVars['id'], ENT_QUOTES, 'UTF-8')):NULL;
         $keyword = @$allPostVars['keyword']?@trim(htmlspecialchars($allPostVars['keyword'], ENT_QUOTES, 'UTF-8')):NULL;
-        $weightage = isset($allPostVars['weightage'])?@intval($allPostVars['weightage']):NULL;
+        $weightage = isset($allPostVars['weightage'])?@floatval($allPostVars['weightage']):NULL;
         $is_required = @$allPostVars['is_required'] === "on"?true:false;
         $is_available = @$allPostVars['is_available'] === "on"?true:false;
 
@@ -198,7 +198,7 @@ class JobController extends Controller {
 
         $allPostVars = $app->request->post();
         $keyword = @$allPostVars['keyword']?@trim(htmlspecialchars($allPostVars['keyword'], ENT_QUOTES, 'UTF-8')):NULL;
-        $weightage = @$allPostVars['weightage']?@trim(htmlspecialchars($allPostVars['weightage'], ENT_QUOTES, 'UTF-8')):NULL;
+        $weightage = isset($allPostVars['weightage'])?@floatval($allPostVars['weightage']):NULL;
         $is_required = @$allPostVars['is_required'] === "on"?true:false;
         $is_available = @$allPostVars['is_available'] === "on"?true:false;
 
