@@ -209,7 +209,7 @@ $.ajax({
 
       $('.skills'+applicant.user_id).html("");
       applicant.resume_keywords.forEach(function (e) {
-        $('.skills'+applicant.user_id).append('<div class="chip light-blue darken-2 white-text">'+e.keyword.keyword+'</div> ');
+        $('.skills'+applicant.user_id).append('<div class="chip light-blue darken-2 white-text" style="margin-bottom:2px">'+e.keyword.keyword+'</div> ');
       });
 
       $('.selectapplicant').click(function(ev) {
