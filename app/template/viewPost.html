@@ -186,9 +186,13 @@ function loadData() {
           }
         });
       });
+      secondload();
     }
   }); 
 
+}
+
+function secondload() {
 url = 'api/applicant/<?php echo $_GET["id"];?>';
 $.ajax({
   type: "GET",
