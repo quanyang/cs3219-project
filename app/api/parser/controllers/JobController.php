@@ -129,7 +129,7 @@ class JobController extends Controller {
             $jobrecruiter->user_id = $user->id;
             $jobrecruiter->save();
 
-			shell_exec("java -jar ../../parser.jar '$description' '$job->id'");
+			shell_exec("java -jar ../../parser.jar '$description' '$job->id' >/dev/null 2>/dev/null &");
 
             echo json_encode($job, JSON_UNESCAPED_SLASHES);
         } catch (\Exception $e) {
