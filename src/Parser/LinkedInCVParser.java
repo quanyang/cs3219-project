@@ -67,7 +67,7 @@ public class LinkedInCVParser implements IParser<JobApplication> {
 	@Override
 	public JobApplication parse(String content) {
 		String contentArr = removePageNumber(content);
-		HashMap<String, String> sessions = breakIntoSessions(content);
+		HashMap<String, String> sessions = breakIntoSessions(contentArr);
 		Set<String> keywords = new HashSet<String>();
 		// Allocate Skills & Expertise (as a string line)
 		if (sessions.containsKey("Skills & Expertise")) {
@@ -93,14 +93,16 @@ public class LinkedInCVParser implements IParser<JobApplication> {
 		}
 		ApplicationBuilder ab = new ApplicationBuilder(name, email, contact, userId, jobId ,applicationId);
 		for (String keyword : keywords) {
-			if (keyword != "" || keyword!= null || keyword != " ") {
+			if (keyword != "" && keyword!= null && keyword != " ") {
 				int kw = KeywordDictionary.getInstance().newKeyword(keyword);
 				if (kw != -1) {
 					ab.addKeywordFound(new Pair<String, Integer>(keyword, kw));
 				} else {
 					System.out.println("Something wrong when calling newKeyword");
 				}
-			}
+			} else if(keyword.substring(0, 4)== "Page" && keyword.length()== 5){
+                System.out.println("Page");
+            }
 		}
 		return ab.buildApplication(resume_path);
 	}

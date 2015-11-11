@@ -48,6 +48,7 @@ public class JobParser implements IParser<Job>{
 	
 	private List<JobRequirement> parseRequirement(String jobDescription){
         System.out.println("parsing jobderequirements");
+        jobDescription = jobDescription.replaceAll(",", "");
 	       List<JobRequirement> requirements = new ArrayList<JobRequirement>();
 	       for(String keyword: keywords.keySet()){
 	    	   int size = jobDescription.length();
