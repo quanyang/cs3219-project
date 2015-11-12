@@ -6,16 +6,17 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javafx.util.Pair;
+import Builder.IBuilder;
 import Builder.JobBuilder;
 import Models.Job;
 import Models.JobRequirement;
+import javafx.util.Pair;
 
 /**
  * @author Chen Tze Cheng(A0112092W)
  *
  */
-public class JobParser implements IParser<Job>{
+public class JobParser implements IParser<JobBuilder>{
 	
 	private HashMap<String, Integer> keywords;
 	private int jobId;
@@ -25,26 +26,20 @@ public class JobParser implements IParser<Job>{
 		this.jobId = jobId;
 	}
 	
-    public Job parse(String jobDescription) {
+    public JobBuilder parse(JobBuilder builder, String jobDescription) {
         System.out.println("inside parsing jobdescription");
         System.out.println("initializing job builder");
 
-        JobBuilder jobBuilder = new JobBuilder(jobId);
+        builder = new JobBuilder(jobId);
         List<JobRequirement> jobRequirements = parseRequirement(jobDescription);
         System.out.println("adding jobderequirements");
 
         for(JobRequirement j : jobRequirements){
-            jobBuilder.addJobRequirement(j);
+        	builder.addJobRequirement(j);
         }
-        Job job = jobBuilder.build();
        //postParse(requirements);
-        return job;
+        return builder;
     }
-	@Override
-	public void postParse(Job results) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	private List<JobRequirement> parseRequirement(String jobDescription){
         System.out.println("parsing jobderequirements");

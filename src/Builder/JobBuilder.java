@@ -6,7 +6,7 @@ import java.util.List;
 import Models.Job;
 import Models.JobRequirement;
 
-public class JobBuilder {
+public class JobBuilder implements IBuilder<Job> {
 	private int jobId;
 	private List<JobRequirement> _jobRequirements;
 	public JobBuilder(int jobId){

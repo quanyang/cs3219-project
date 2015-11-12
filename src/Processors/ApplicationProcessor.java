@@ -8,7 +8,7 @@ import Models.JobApplication;
 import Parser.ApplicationParser;
 import Parser.PdfConverter;
 
-public class ApplicationProcessor {
+public class ApplicationProcessor implements IProcessor {
 	ApplicationBuilder applicantBuilder;
 	JobApplication application;
 	private int userId;
@@ -18,8 +18,6 @@ public class ApplicationProcessor {
 	private String content;
 
 	public ApplicationProcessor(int userId, int jobId,int applicationId, String filePath) {
-		// List<JobRequirement> requirements =
-		// DatabaseCommand.getJobRequirements(jobId);
 
 		// pdf to string
 		content = PdfConverter.ToString(filePath);
@@ -29,7 +27,7 @@ public class ApplicationProcessor {
 		this.applicationId = applicationId;
 	}
 
-	public boolean run() {
+	public boolean process() {
 	    if(this.content == null){
 	        return false;
 	    }
@@ -38,9 +36,10 @@ public class ApplicationProcessor {
 			KeywordDictionary dictionary = KeywordDictionary.getInstance();
 			ApplicationParser parser = new ApplicationParser(dictionary.getKeywords().keySet(), userId, jobId, applicationId,
 					filePath);
-			this.application = parser.parse(content);
+			ApplicationBuilder builder = null;
+			this.application = parser.parse(builder, content).build();
 		} catch (Exception ex) {
-			System.out.println("Something went wrong in App Proc "+ex.getMessage());
+			System.out.println("Something went wrong in ApplicationProcessor: "+ex.getMessage());
 			return false;
 		}
 		return true;

@@ -5,7 +5,7 @@ import java.util.HashMap;
 import javafx.util.Pair;
 import Models.JobApplication;
 
-public class ApplicationBuilder {
+public class ApplicationBuilder implements IBuilder<JobApplication> {
 	private String _name;
 	private String _email;
 	private String _contact;
@@ -15,8 +15,9 @@ public class ApplicationBuilder {
 	private int userId;
 	private int jobId;
 	private int applicationId;
+	private String resume_path;
 	
-    public ApplicationBuilder(String name, String email, String contact, int userId, int jobId, int applicationId){
+    public ApplicationBuilder(String name, String email, String contact, int userId, int jobId, int applicationId, String resume_path){
       _name = name;
       _email = email;
       _contact = contact;
@@ -25,13 +26,15 @@ public class ApplicationBuilder {
       this.userId = userId;
       this.jobId = jobId;
       this.applicationId = applicationId;
+      this.resume_path = resume_path;
     }
     
     public void addKeywordFound(Pair<String, Integer> keywordFound){
     	this.keywords.put(keywordFound.getKey(), keywordFound.getValue());
     }
-    
-    public JobApplication buildApplication(String resume_path){
+
+	@Override
+	public JobApplication build() {
         JobApplication application = new JobApplication(userId, jobId);
         application.setName(_name);
         application.setEmail(_email);
@@ -40,5 +43,5 @@ public class ApplicationBuilder {
         application.set_keywordsMatched(keywords);
         application.setId(applicationId);
         return application;
-    }
+	}
 }

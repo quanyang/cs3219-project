@@ -10,12 +10,11 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javafx.util.Pair;
 import Builder.ApplicationBuilder;
-import Dictionary.KeywordDictionary;
-import Models.JobApplication;
+import Builder.KeywordBuilder;
+import javafx.util.Pair;
 
-public class LinkedInCVParser implements IParser<JobApplication> {
+public class LinkedInCVParser implements IParser<ApplicationBuilder> {
 
 	final String[] headers = new String[] { "Associations", "Certifications", "Courses", "Education",
 			"Honors and Awards", "Interests", "Languages", "Organizations", "Projects", "Publications",
@@ -23,7 +22,6 @@ public class LinkedInCVParser implements IParser<JobApplication> {
 			"Volunteer experiences", "Experience", "Work experience", "Employment History" };
 	final String eduPattern = "(.*), (.*), (.*) - (.*)";
 	// final static String pattern = "Contact (.*) on LinkedIn";
-	final static String pattern = "Contact (.*) on LinkedIn";
 
 	private String name;
 	private String email;
@@ -48,12 +46,12 @@ public class LinkedInCVParser implements IParser<JobApplication> {
 	}
 
 	public static boolean isLinkedInCV(String content) {
+		//Regex of 
+		final String pattern = "Contact (.*) on LinkedIn";
 		// has Contact xxxxxx on LinkedIn at the end (excluding page number)
 		content = content.replaceAll("\r", "");
 		String[] lines = content.split("\n");
-//		System.out.println("Checking is LinkedIn");
 		Pattern p = Pattern.compile(pattern);
-//		System.out.println(content);
 
 		boolean isLinkedIn = false;
 		for (String line : lines) {
@@ -61,11 +59,10 @@ public class LinkedInCVParser implements IParser<JobApplication> {
 			isLinkedIn = isLinkedIn || m.matches();
 		}
 		return isLinkedIn;
-		// return true;
 	}
-
+	
 	@Override
-	public JobApplication parse(String content) {
+	public ApplicationBuilder parse(ApplicationBuilder builder, String content){
 		String contentArr = removePageNumber(content);
 		HashMap<String, String> sessions = breakIntoSessions(contentArr);
 		Set<String> keywords = new HashSet<String>();
@@ -91,27 +88,16 @@ public class LinkedInCVParser implements IParser<JobApplication> {
 				}
 			}
 		}
-		ApplicationBuilder ab = new ApplicationBuilder(name, email, contact, userId, jobId ,applicationId);
-		for (String keyword : keywords) {
-			if (keyword != "" && keyword!= null && keyword != " ") {
-				int kw = KeywordDictionary.getInstance().newKeyword(keyword);
-				if (kw != -1) {
-					ab.addKeywordFound(new Pair<String, Integer>(keyword, kw));
-				} else {
-					System.out.println("Something wrong when calling newKeyword");
-				}
-			} else if(keyword.substring(0, 4)== "Page" && keyword.length()== 5){
-                System.out.println("Page");
-            }
+		builder = new ApplicationBuilder(name, email, contact, userId, jobId ,applicationId,resume_path);
+		
+		for(String k :keywords){
+			Pair<String,Integer> keywordFound = KeywordBuilder.build(k);
+			builder.addKeywordFound(keywordFound);
 		}
-		return ab.buildApplication(resume_path);
+		return builder;
 	}
-
-	@Override
-	public void postParse(JobApplication results) {
-		// TODO Auto-generated method stub
-
-	}
+	
+	
 
 	private String removePageNumber(String content) {
 		ArrayList<String> result = new ArrayList<String>();
