@@ -219,7 +219,7 @@ class ApplicationController extends Controller {
     }
 
     public static function saveResumeFromUpload() {
-        $allowedExts = array("pdf", "doc", "docx");
+        $allowedExts = array("pdf");
         $file = $_FILES['resume-file'];
         $extension = end(explode(".", $file["name"]));
 
